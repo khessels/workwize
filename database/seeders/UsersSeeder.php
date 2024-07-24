@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
     public function users(): array
     {
         $users                  = [];
-
+        // note: permissions and roles are defined in the constants file
 
         $user['name']           = 'KC, the new Backend dev';
         $user['status']         = 'active';
@@ -54,8 +54,8 @@ class UsersSeeder extends Seeder
     }
     public function run(): void
     {
-        $superAdminPassword = $this->command->ask("Set super admin password", $this->pw);
-        $superAdminEmail = $this->command->ask("Set super admin email", $this->email);
+        $superAdminPassword = $this->command->ask("Set admin password", $this->pw);
+        $superAdminEmail = $this->command->ask("Set admin email", $this->email);
         $this->command->info('Credentials for Kees Hessels ( ' . $superAdminEmail . ' ): ' . $superAdminPassword);
         $this->command->info('*******');
 

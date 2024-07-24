@@ -3,6 +3,7 @@
 $arrAllPermissions = [
     'Super Admin',
     'order products',
+    'view products',
     'manage products',
 ];
 return [
@@ -15,11 +16,11 @@ return [
         ],
         [
             'name'=> 'customer',
-            'permissions' => ['order products']
+            'permissions' => ['order products', 'view products']
         ],
         [
             'name'=> 'supplier',
-            'permissions' => ['manage products']
+            'permissions' => ['manage products', 'view products']
         ],
     ]
 ];
