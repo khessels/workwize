@@ -1,10 +1,15 @@
 ## About workwize
 
 Small Demo app.
-- Extract to working dir and setup as usual
+- Assuming a default installation using php8.2+ nginx & mysql server installed on the same server.  
+- clone to working dir and setup as usual
 - chmod +x perm_fix.sh and run sudo ./perm_fix.sh
  (this fixes file \ directory permissions in linux)
 - edit the env file, set correct database credentials
+- php artisan key:generate
+- php artisan optimize
+- npm install
+- npm run build (this builds your assets using vite)
 - run migration and seed
 
 This demo uses Spatie permission for role\permission management.
