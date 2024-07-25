@@ -11,7 +11,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
+// with sanctum middleware guest mode is not working.
+// best way to do this is with a small middleware layer called guest, we can group it just as standard laravel authentication (breeze)
+// todo: group routes with workaround -> Auth::check() ? Auth::user() : null
+
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
@@ -33,9 +36,9 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.store');
-});
 
-Route::middleware('auth')->group(function () {
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

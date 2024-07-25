@@ -14,18 +14,19 @@ The user seeder creates three users 1 for developer, 1 for supplier and one for 
 - supplier@workwize.com
 - customer@workwize.com
 
-#### Same passwords for all users
+### Same password for all users
 - password: 1234
 
-#### This project utilises sanctum
+### This project utilises sanctum
 Meaning that if you have issues logging in, please check the "statefull" env var 
 The domain used for development is local.workwize.com (on wsl ubuntu) so 
 the statefull domain added to the sanctum config is .workwize.com
 
-#### nginx config
+### nginx config
 a simple non https virtual server config for local.workwize.com please adapt paths accordingly
 it is for php-fpm 8.3, so you might have to change that to your php version. 
 Try to keep it 8.1 or above.
-
-
+# important
+Don't forget to update your hosts file(s)
+if on wsl also update the host file in windows\system32\drivers\etc\hosts
 
