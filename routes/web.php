@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $roles =  Auth::user()->roles->pluck('name')->toArray();
+    $roles = [];
+    if(Auth::check()){
+        $roles =  Auth::user()->roles->pluck('name')->toArray();
+    }
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
