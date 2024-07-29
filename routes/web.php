@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:customer')->group(function () {
         Route::get('/cart', [CartController::class, 'show'])->name('cart');
         Route::post('/cart/checkout', [CartController::class, 'checkOut'])->name('checkout');
-        Route::get('/carts/history', [CartController::class, 'showHistory'])->name('carts.history');
+        Route::get('/carts/history', [CartController::class, 'showHistory'])->name('carts.user.history');
         Route::post('/cart/item', [CartController::class, 'addItem'])->name('cart.item.add');
         Route::delete('/cart/item/{id}', [CartController::class, 'removeItem'])->name('cart.item.remove');
     });

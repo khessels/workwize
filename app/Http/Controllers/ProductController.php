@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class ProductController extends Controller
     }
     public function showSales(Request $request)
     {
-        return Inertia::render('Sales',['salesCount' => 0]);
+        $usersSales = User::has('carts')->with('carts.items.product')->get();
+        return Inertia::render('Sales', ['sales' => $usersSales]);
     }
 
 }

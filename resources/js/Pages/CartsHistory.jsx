@@ -18,58 +18,51 @@ export default function CartsHistory({ auth, carts }) {
                             <table
                                 className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
                                 <thead>
-                                <tr>
-                                    <th>Key</th>
-                                    <th>Id</th>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
-                                </tr>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                {Object.entries(cartItems).map(([index, data]) => (
-                                    <tr key={index}>
-                                        <td>{index}</td>
-                                        <td>{data.id}</td>
-                                        <td>{data.name}</td>
-                                        <td>{data.quantiy}</td>
-                                        <td>{data.price}</td>
-                                        <td>
-                                            <button onClick={() => {
-                                                debugger;
-                                                // todo: remove from array
-                                                setCartItems([
-                                                    ...cartItems,
-                                                    data
-                                                ]);
-                                            }}>Remove item from cart
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {/*{products.map(function (data, index) {*/}
-                                {/*    return (*/}
-                                {/*        <tr key={index}>*/}
-                                {/*            <td>{index}</td>*/}
-                                {/*            <td>{data.id}</td>*/}
-                                {/*            <td>{data.name}</td>*/}
-                                {/*            <td>{data.stock}</td>*/}
-                                {/*            <td>{data.price}</td>*/}
-                                {/*            <td>*/}
-                                {/*                <button onClick={() => {*/}
-                                {/*                    debugger;*/}
-                                {/*                    setCartItems([*/}
-                                {/*                        ...cartItems,*/}
-                                {/*                        data*/}
-                                {/*                    ]);*/}
-                                {/*                }}>Add*/}
-                                {/*                </button>*/}
-                                {/*            </td>*/}
-                                {/*        </tr>*/}
-                                {/*    )*/}
-                                {/*})}*/}
-
+                                    {carts.map(function (cart, index) {
+                                        return (
+                                            <>
+                                                <tr key={index} className="rowhighlight">
+                                                    <td>{cart.id}</td>
+                                                    <td>{cart.updated_at}</td>
+                                                    <td>{cart.amount}</td>
+                                                    <td>
+                                                        <button onClick={() => {
+                                                        }}> Print invoice ?
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <table
+                                                    className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Product</th>
+                                                            <th>Quantity</th>
+                                                            <th>Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {cart.items.map(function (item, indexItem) {
+                                                            return(
+                                                                <tr key={indexItem}>
+                                                                    <td>{item.product.name}</td>
+                                                                    <td>{item.quantity}</td>
+                                                                    <td>{item.price}</td>
+                                                                </tr>
+                                                            )
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </>
+                                        )
+                                    })}
                                 </tbody>
                             </table>
                         </div>

@@ -4,6 +4,9 @@ import { Inertia } from '@inertiajs/inertia'
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+
+
 export default function Cart({ auth, cart }) {
     const notify_removed = () => toast("Removed cart");
     const notify_checking_out = () => toast("Checked out");
@@ -23,6 +26,7 @@ export default function Cart({ auth, cart }) {
                         <div className="p-6 text-gray-900">
                             <button onClick={() => {
                                 axios.post('/cart/checkout');
+                                window.location = '/'
                             }}>Check out
                             </button>
                             <table

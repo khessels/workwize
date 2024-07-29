@@ -14,21 +14,33 @@ use Inertia\Response;
 use Illuminate\Foundation\Application;
 //use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route;
+use function PHPUnit\Framework\isNull;
+
 class PageController extends Controller
 {
     public function index(Request $request)
     {
         $roles = [];
+        $cartsHistoryCount = 0;
+        $salesCount = 0;
+        $products = null;
         if(Auth::check()){
             $roles =  Auth::user()->roles->pluck('name')->toArray();
         }
+
         if(in_array('supplier', $roles)){
             $products = Product::orderBy('name', 'ASC')->get()->toArray();
-        }else{
+            $salesCount = $this->getCartsHistoryAllCount();
+        }
+
+        if(in_array('customer', $roles)){
+            $cartsHistoryCount = $this->getCartsHistoryCount();
+        }
+
+        if(isNull($products)){
             $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('name', 'ASC')->get()->toArray();
         }
 
-        //die(json_encode($products));
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
@@ -36,6 +48,8 @@ class PageController extends Controller
             'phpVersion' => PHP_VERSION,
             'roles' => $roles,
             'products' => $products,
+            'cartsHistoryCount' => $cartsHistoryCount,
+            'salesCount' => $salesCount
         ]);
     }
     public function dashboard(Request $request)

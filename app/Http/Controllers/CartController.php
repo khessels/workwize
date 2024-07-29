@@ -15,20 +15,22 @@ use JetBrains\PhpStorm\NoReturn;
 
 class CartController extends Controller
 {
-    public function show(Request $request): Response
+    public function show(Request $request)
     {
         $cart = $this->getCart(true);
-        //die(json_encode($cart));
+        if(empty($cart)){
+            return redirect::route('welcome');
+        }
         // todo: add provision to Cart page that disables checkout because the cart is currently being processed
-        $carts = $this->getCartsHistory();
-        return Inertia::render('Cart', ['cart' => $cart, 'cartsHistoryCount' => $carts->count()] );
+        $cartsHistoryCount = $this->getCartsHistoryCount();
+        return Inertia::render('Cart', ['cart' => $cart, 'cartsHistoryCount' => $cartsHistoryCount] );
     }
     public function showHistory(Request $request): Response
     {
-        $carts = $this->getCartsHistory();
+        $carts = $this->getCartsHistory(true);
         return Inertia::render('CartsHistory', ['carts' => $carts]);
     }
-    #[NoReturn] public function addItem(Request $request): \Illuminate\Http\Response
+    public function addItem(Request $request): \Illuminate\Http\Response
     {
         //error_log( print_r($request->all(), true));
         // todo: validate request
@@ -66,7 +68,7 @@ class CartController extends Controller
         }
         return response()->noContent()->setStatusCode(300);
     }
-    #[NoReturn] public function removeItem(Request $request, $id): \Illuminate\Http\Response
+    public function removeItem(Request $request, $id): \Illuminate\Http\Response
     {
         // todo: validate request
         $cart = $this->getCart();
@@ -78,18 +80,7 @@ class CartController extends Controller
         }
         return response()->noContent()->setStatusCode(300);
     }
-    private function getCart(bool $withProduct = false)
-    {
-        $with = 'items';
-        if($withProduct){
-            $with = 'items.product';
-        }
-        return Cart::where('user_id', Auth::id())->whereIn('paid', ['NO', 'PROCESSING'])->with($with)->first();
-    }
-    private function getCartsHistory()
-    {
-        return Cart::where('user_id', Auth::id())->whereIn('paid', ['YES'])->with('items')->get();
-    }
+
     public function checkOut(Request $request)
     {
         // todo: validate your cart items are still available in stock (we assume that they are for now !)
@@ -100,17 +91,11 @@ class CartController extends Controller
         $cart = $this->getCart();
 
         if( ! $cart){
-            $cart = new Cart();
-            $cart->user_id = Auth::id();
-            $cart->save();
+            return redirect::route('welcome');
         }else if($cart->paid == 'PROCESSING'){
             // cart is being processed
             return response()->noContent()->setStatusCode(300);
         }
-
-        // set cart in processing mode, so we can not accidentally check out with another process
-        $cart->paid = 'PROCESSING';
-        $cart->save();
 
         // validate stock availability
         foreach($cart->items as $item){
@@ -123,24 +108,36 @@ class CartController extends Controller
         // We have sufficient stock, let's wrap things into a transaction and finalize
         // payment, decrease stock and set cart to paid
         DB::Transaction(function () use ($cart){
+            // set cart in processing mode, so we can not accidentally check out with another process
+            // disabled for now since we don't have to consult external api's
+            //$cart->paid = 'PROCESSING';
+            //$cart->save();
+
             // todo: we do some payment processing here
 
             // Assuming the payment was successful we decrease the stock
+            $cartTotal = 0;
             foreach($cart->items as $item) {
                 $product = Product::find($item->product_id);
                 $product->stock -= $item->quantity;
                 $product->save();
 
-                // we set the cart to paid
-                $cart->paid='YES';
-                $cart->save();
+                // save the sold price for historical reasons
+                $item->price = $product->price;
+                $cartTotal += $item->quantity * $product->price;
+                $item->save();
+
             }
+
+            // we set the cart to paid and add total
+            $cart->total = $cartTotal;
+            $cart->paid='YES';
+            $cart->save();
+
             // todo: we send some awesome Workwize emails designed by Awesome Workwize designers
 
         });
 
-        error_log('Sending redirect');
         return redirect::route('welcome');
     }
-
 }

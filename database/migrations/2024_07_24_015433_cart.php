@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(false);
             $table->enum('paid', ['YES', 'NO', 'PROCESSING'])->default('NO')->nullable(false);
+            $table->double('total', 6, 2)->nullable(true);
             $table->timestamps();
         });
 
@@ -32,7 +33,7 @@ return new class extends Migration
                 ->on('products')
                 ->onDelete(' cascade');
             $table->integer('quantity')->nullable(false);
-
+            $table->double('price', 6, 2)->nullable(true);
             $table->timestamps();
         });
 
