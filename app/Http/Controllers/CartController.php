@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use JetBrains\PhpStorm\NoReturn;
 
 class CartController extends Controller
 {
@@ -25,8 +26,9 @@ class CartController extends Controller
         $carts = $this->getCartsHistory();
         return Inertia::render('CartsHistory', ['carts' => $carts]);
     }
-    public function addItem(Request $request): void
+    #[NoReturn] public function addItem(Request $request): void
     {
+        error_log( print_r($request->all(), true));
         // todo: validate request
         $cart = $this->getCart();
         if( ! $cart){
@@ -37,15 +39,16 @@ class CartController extends Controller
             // cart is being processed
             response()->noContent()->setStatusCode(303);
         }
-
-        $product = Product::find($request->product_id);
+        error_log('id: ' . $request->id);
+        $product = Product::find($request->id)->toArray();
+        error_log( print_r($product, true));
 
         // if in cart increase quantity, otherwise add item
         if( $cart->items) {
             foreach ($cart->items as $item) {
-                if ($item->product_id = $request->product_id) {
-                    if ($product->stock >= $request->quantity) {
-                        $item->quantity += $request->quantity;
+                if ($item->product_id = $request->id) {
+                    if ($product->stock >= 1) {
+                        $item->quantity += 1;
                         $item->save();
                         response()->noContent()->setStatusCode(200);
                     }

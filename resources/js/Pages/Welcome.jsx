@@ -128,18 +128,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                     <td>{data.price}</td>
                                                     <td>
                                                         <button onClick={() => {
-                                                            fetch('/cart/item', {
-                                                                method: 'POST',
-                                                                headers: {
-                                                                    'Accept': 'application/json, text/plain, */*',
-                                                                    'Content-Type': 'application/json',
-                                                                    'X-Requested-With': 'XMLHttpRequest',
-                                                                    'X-CSRF-TOKEN': window.Laravel.csrfToken
-                                                                },
-                                                                body: JSON.stringify(data)
-                                                            }).then((res) => res.json())
-                                                                .then((data) => console.log(data))
-                                                                .catch((err) => console.log(err))
+                                                            axios.post('/cart/item', JSON.stringify( data));
                                                             notify_added()
                                                         }}>Add
                                                         </button>
@@ -148,7 +137,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                 </tr>
                                             )
                                          })}
-
                                         </tbody>
                                     </table>
                                     {/* <img
