@@ -3,7 +3,7 @@ import {Head, useRemember} from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia'
 import { useState } from 'react';
 
-export default function Cart({ auth, cart }) {
+export default function CartsHistory({ auth, carts }) {
     return (
         <AuthenticatedLayout
             user={auth.user}

@@ -15,10 +15,15 @@ class CartController extends Controller
 {
     public function show(Request $request): Response
     {
-        $roles =  Auth::user()->roles->pluck('name')->toArray();
         $cart = $this->getCart();
         // todo: add provision to Cart page that disables checkout because the cart is currently being processed
-        return Inertia::render('Cart', ['roles' => $roles, 'cart' => $cart]);
+        $carts = $this->getCartsHistory();
+        return Inertia::render('Cart', ['cart' => $cart, 'cartsHistoryCount' => $carts->count()] );
+    }
+    public function showHistory(Request $request): Response
+    {
+        $carts = $this->getCartsHistory();
+        return Inertia::render('CartsHistory', ['carts' => $carts]);
     }
     public function addItem(Request $request): void
     {
@@ -67,7 +72,11 @@ class CartController extends Controller
     }
     private function getCart()
     {
-        return Cart::where('user_id', Auth::id())->whereIn('paid', ['YES', 'PROCESSING'])->with('items')->first();
+        return Cart::where('user_id', Auth::id())->whereIn('paid', ['NO', 'PROCESSING'])->with('items')->first();
+    }
+    private function getCartsHistory()
+    {
+        return Cart::where('user_id', Auth::id())->whereIn('paid', ['YES'])->with('items')->get();
     }
     public function checkOut(Request $request): void
     {

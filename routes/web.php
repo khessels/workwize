@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::middleware('role:customer')->group(function () {
         Route::get('/cart', [CartController::class, 'show'])->name('cart');
+        Route::get('/carts/history', [CartController::class, 'showHistory'])->name('carts.history');
     });
     Route::middleware('role:supplier')->group(function () {
         Route::get('/products/manage', [ProductController::class, 'show'])->name('products.manage');

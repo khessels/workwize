@@ -2,7 +2,7 @@ import { Link, Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { useRemember } from '@inertiajs/react'
 
-export default function Welcome({ auth, laravelVersion, phpVersion, roles, products }) {
+export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount }) {
     // const [cartItems, setCartItems] = useState([]);
     const [cartItems, setCartItems] = useRemember([], 'cart');
 
@@ -41,21 +41,31 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                             <nav className="-mx-3 flex flex-1 justify-end">
                                 {auth.user ? (
                                     <>
-                                        {roles.includes("developer") &&
-                                            <Link
-                                                href={route('dashboard')}
-                                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                            >
-                                                Dashboard
-                                            </Link>
-                                        }
+
+                                        <Link
+                                            href={route('dashboard')}
+                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            Dashboard
+                                        </Link>
+
                                         {roles.includes("customer") &&
-                                            <Link
-                                                href={route('cart')}
-                                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                            >
-                                                Cart
-                                            </Link>
+                                            <>
+                                                <Link
+                                                    href={route('cart')}
+                                                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                                >
+                                                    Cart
+                                                </Link>
+                                                {cartsHistoryCount > 0 &&
+                                                    <Link
+                                                        href={route('carts.history')}
+                                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                                    >
+                                                        Previous purchases
+                                                    </Link>
+                                                }
+                                            </>
                                         }
                                         {roles.includes("supplier") &&
                                             <Link
