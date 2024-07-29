@@ -1,11 +1,14 @@
 import { Link, Head } from '@inertiajs/react';
-import { useState } from 'react';
 import { useRemember } from '@inertiajs/react'
 
-export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount }) {
-    // const [cartItems, setCartItems] = useState([]);
-    const [cartItems, setCartItems] = useRemember([], 'cart');
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+import { usePost } from "../Components/Post.jsx"
+
+export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount }) {
+    const [cartItems, setCartItems] = useRemember([], 'cart');
+    const notify_added = () => toast("Added to cart");
     const handleImageError = () => {
         document.getElementById('screenshot-container')?.classList.add('!hidden');
         document.getElementById('docs-card')?.classList.add('!row-span-1');
@@ -15,6 +18,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
 
     return (
         <>
+            <ToastContainer />
             <Head title="Welcome" />
             <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
                 <img
@@ -124,12 +128,22 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                     <td>{data.price}</td>
                                                     <td>
                                                         <button onClick={() => {
-                                                            setCartItems([
-                                                                ...cartItems,
-                                                                data
-                                                            ]);
+                                                            fetch('/cart/item', {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Accept': 'application/json, text/plain, */*',
+                                                                    'Content-Type': 'application/json',
+                                                                    'X-Requested-With': 'XMLHttpRequest',
+                                                                    'X-CSRF-TOKEN': window.Laravel.csrfToken
+                                                                },
+                                                                body: JSON.stringify(data)
+                                                            }).then((res) => res.json())
+                                                                .then((data) => console.log(data))
+                                                                .catch((err) => console.log(err))
+                                                            notify_added()
                                                         }}>Add
                                                         </button>
+
                                                     </td>
                                                 </tr>
                                             )

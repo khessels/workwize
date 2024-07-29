@@ -15,7 +15,11 @@ class ProductController extends Controller
 {
     public function show(Request $request)
     {
-        $roles =  Auth::user()->roles->pluck('name')->toArray();
-        return Inertia::render('ProductsManage', ['roles' => $roles]);
+        return Inertia::render('Products');
     }
+    public function showSales(Request $request)
+    {
+        return Inertia::render('Sales');
+    }
+
 }

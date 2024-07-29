@@ -20,9 +20,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:customer')->group(function () {
         Route::get('/cart', [CartController::class, 'show'])->name('cart');
         Route::get('/carts/history', [CartController::class, 'showHistory'])->name('carts.history');
+        Route::post('/cart/item', [CartController::class, 'addItem'])->name('cart.item.add');
+        Route::delete('/cart/item', [CartController::class, 'removeItem'])->name('cart.item.remove');
     });
     Route::middleware('role:supplier')->group(function () {
         Route::get('/products/manage', [ProductController::class, 'show'])->name('products.manage');
+        Route::get('/products/sales', [ProductController::class, 'showSales'])->name('products.sales');
     });
 
 });

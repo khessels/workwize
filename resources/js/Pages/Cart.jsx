@@ -28,47 +28,28 @@ export default function Cart({ auth, cart }) {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {Object.entries(cartItems).map(([index, data]) => (
-                                    <tr key={index}>
-                                        <td>{index}</td>
-                                        <td>{data.id}</td>
-                                        <td>{data.name}</td>
-                                        <td>{data.quantiy}</td>
-                                        <td>{data.price}</td>
-                                        <td>
-                                            <button onClick={() => {
-                                                debugger;
-                                                // todo: remove from array
-                                                setCartItems([
-                                                    ...cartItems,
-                                                    data
-                                                ]);
-                                            }}>Remove item from cart
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {/*{products.map(function (data, index) {*/}
-                                {/*    return (*/}
-                                {/*        <tr key={index}>*/}
-                                {/*            <td>{index}</td>*/}
-                                {/*            <td>{data.id}</td>*/}
-                                {/*            <td>{data.name}</td>*/}
-                                {/*            <td>{data.stock}</td>*/}
-                                {/*            <td>{data.price}</td>*/}
-                                {/*            <td>*/}
-                                {/*                <button onClick={() => {*/}
-                                {/*                    debugger;*/}
-                                {/*                    setCartItems([*/}
-                                {/*                        ...cartItems,*/}
-                                {/*                        data*/}
-                                {/*                    ]);*/}
-                                {/*                }}>Add*/}
-                                {/*                </button>*/}
-                                {/*            </td>*/}
-                                {/*        </tr>*/}
-                                {/*    )*/}
-                                {/*})}*/}
+
+                                {cart.items.map(function (data, index) {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index}</td>
+                                            <td>{data.id}</td>
+                                            <td>{data.name}</td>
+                                            <td>{data.stock}</td>
+                                            <td>{data.price}</td>
+                                            <td>
+                                                <button onClick={() => {
+                                                    debugger;
+                                                    setCartItems([
+                                                        ...cartItems,
+                                                        data
+                                                    ]);
+                                                }}>Add
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
 
                                 </tbody>
                             </table>
