@@ -19,7 +19,7 @@ class ProductController extends Controller
     }
     public function showSales(Request $request)
     {
-        return Inertia::render('Sales');
+        return Inertia::render('Sales',['salesCount' => 0]);
     }
 
 }

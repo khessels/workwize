@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class CartItem extends Model
 {
     protected $table="cart_items";
-    protected $fillable = ['cart_id', 'product_id', 'price', 'quantity'];
+    protected $fillable = ['cart_id', 'product_id', 'quantity'];
     public function product(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne('App\Models\CartItem', 'cart_id', 'id');
+        return $this->hasOne('App\Models\Product', 'id', 'product_id');
     }
     public function cart(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('App\Models\Cart', 'cart_id', 'id');
+        return $this->belongsTo('App\Models\Cart', 'id', 'cart_id');
     }
 
 }

@@ -31,7 +31,6 @@ return new class extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete(' cascade');
-            $table->double('price', 6, 2)->nullable(false);
             $table->integer('quantity')->nullable(false);
 
             $table->timestamps();

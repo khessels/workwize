@@ -5,8 +5,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { usePost } from "../Components/Post.jsx"
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink.jsx";
 
-export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount }) {
+export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount, salesCount  }) {
     const [cartItems, setCartItems] = useRemember([], 'cart');
     const notify_added = () => toast("Added to cart");
     const handleImageError = () => {
@@ -45,13 +46,17 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                             <nav className="-mx-3 flex flex-1 justify-end">
                                 {auth.user ? (
                                     <>
-
                                         <Link
-                                            href={route('dashboard')}
                                             className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                        >
-                                            Dashboard
+                                            method="post" href={route('logout')} as="button">
+                                            Log Out
                                         </Link>
+                                        <Link
+                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                            href={route('profile.edit')}>
+                                            Profile
+                                        </Link>
+
 
                                         {roles.includes("customer") &&
                                             <>
@@ -72,12 +77,22 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                             </>
                                         }
                                         {roles.includes("supplier") &&
-                                            <Link
-                                                href={route('products.manage')}
-                                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                            >
-                                                Manage products
-                                            </Link>
+                                            <>
+                                                {salesCount > 0 &&
+                                                    <Link
+                                                        href={route('products.sales')}
+                                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                                    >
+                                                        Sales
+                                                    </Link>
+                                                }
+                                                <Link
+                                                    href={route('products.manage')}
+                                                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                                >
+                                                    Manage products
+                                                </Link>
+                                            </>
                                         }
                                     </>
                                 ) : (
@@ -127,12 +142,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                     <td>{data.stock}</td>
                                                     <td>{data.price}</td>
                                                     <td>
-                                                        <button onClick={() => {
-                                                            axios.post('/cart/item', JSON.stringify( data));
-                                                            notify_added()
-                                                        }}>Add
-                                                        </button>
-
+                                                        {roles.includes("customer") &&
+                                                            <button onClick={() => {
+                                                                axios.post('/cart/item', data);
+                                                                notify_added()
+                                                            }}>Add
+                                                            </button>
+                                                        }
                                                     </td>
                                                 </tr>
                                             )
