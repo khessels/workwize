@@ -1,6 +1,11 @@
 import { Link, Head } from '@inertiajs/react';
+import { useState } from 'react';
+import { useRemember } from '@inertiajs/react'
 
 export default function Welcome({ auth, laravelVersion, phpVersion, roles, products }) {
+    // const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useRemember([], 'cart');
+
     const handleImageError = () => {
         document.getElementById('screenshot-container')?.classList.add('!hidden');
         document.getElementById('docs-card')?.classList.add('!row-span-1');
@@ -46,18 +51,18 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                         }
                                         {roles.includes("customer") &&
                                             <Link
-                                                href={route('customer.product.list')}
+                                                href={route('cart')}
                                                 className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                             >
-                                                Customer
+                                                Cart
                                             </Link>
                                         }
                                         {roles.includes("supplier") &&
                                             <Link
-                                                href={route('supplier.product.list')}
+                                                href={route('products.manage')}
                                                 className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                             >
-                                                Supplier
+                                                Manage products
                                             </Link>
                                         }
                                     </>
@@ -89,26 +94,37 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                 >
                                     <table className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
                                         <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Product</th>
-                                                <th>Available</th>
-                                                <th>Action</th>                                                
-                                            </tr>                                                                                
+                                        <tr>
+                                            <th>Key</th>
+                                            <th>Id</th>
+                                            <th>Product</th>
+                                            <th>Stock</th>
+                                            <th>Price</th>
+                                            <th>Action</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                        {/* {products.map(function(data) {
+                                         {products.map(function(data, index) {
                                             return (
-                                                <>
-                                                    <tr>
-                                                        <td>{data.id}</td>
-                                                        <td>{data.name}</td>
-                                                        <td>{data.quantity}</td>
-                                                        <td><a href="#" >Add to cart</a></td>
-                                                    </tr>
-                                                </>
+                                                <tr key={index}>
+                                                    <td>{index}</td>
+                                                    <td>{data.id}</td>
+                                                    <td>{data.name}</td>
+                                                    <td>{data.stock}</td>
+                                                    <td>{data.price}</td>
+                                                    <td>
+                                                        <button onClick={() => {
+                                                            setCartItems([
+                                                                ...cartItems,
+                                                                data
+                                                            ]);
+                                                        }}>Add
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             )
-                                        })}                                         */}
+                                         })}
+
                                         </tbody>
                                     </table>
                                     {/* <img

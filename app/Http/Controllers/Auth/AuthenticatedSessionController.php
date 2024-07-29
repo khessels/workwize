@@ -32,16 +32,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        $roles = Auth::user()->roles->pluck('name');
-        if(in_array('customer', $roles->toArray())) {
-            return redirect()->intended(route('customer', absolute: false));
-        }
-        if(in_array('supplier', $roles->toArray())) {
-            return redirect()->intended(route('supplier', absolute: false));
-        }
-        if(in_array('developer', $roles->toArray())) {
-             return redirect()->intended(route('dashboard', absolute: false));
-        }
+        return redirect()->intended(route('welcome', absolute: false));
     }
 
     /**
