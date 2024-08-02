@@ -93,10 +93,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                         </NavLink>
                                                     }
                                                     <NavLink className="px-3 py-2"
-                                                            onClick={(event) => {
-                                                                event.preventDefault();
-                                                                document.getElementById('mdl_add_product').showModal()
-                                                            }}>Add
+                                                             onClick={(event) => {
+                                                                 event.preventDefault();
+                                                                 document.getElementById('mdl_add_product').showModal()
+                                                             }}>Add
                                                         Product
                                                     </NavLink>
                                                 </>
@@ -127,102 +127,110 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                 </nav>
             </header>
 
-            <main>
-                <div>
-                    <div className="overflow-x-auto">
-                        <table className="table">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Product</th>
-                                <th>Stock</th>
-                                <th>Price</th>
-                                {roles.length > 0 &&
-                                    <>
-                                        <th>Active</th>
-                                        <th>Action</th>
-                                    </>
-                                }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {products.map(function (data, index) {
-                                let url = '/product/' + data.id
-                                return (
-                                    <tr key={index}>
-                                        <td>{data.id}</td>
-                                        <td>{data.name}</td>
-                                        <td>{data.stock}</td>
-                                        <td>{data.price}</td>
+            <div className="grid grid-cols-5 grid-rows-5 gap-4 px-4 py-4">
+                <div>&nbsp;</div>
+                <div className="col-span-3"> <main>
+                    <div>
+                        <div className="overflow-x-auto">
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Product</th>
+                                    <th>Stock</th>
+                                    <th>Price</th>
+                                    {roles.length > 0 &&
+                                        <>
+                                            <th>Active</th>
+                                            <th>Action</th>
+                                        </>
+                                    }
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {products.map(function (data, index) {
+                                    let url = '/product/' + data.id
+                                    return (
+                                        <tr key={index}>
+                                            <td>{data.id}</td>
+                                            <td>{data.name}</td>
+                                            <td>{data.stock}</td>
+                                            <td>{data.price}</td>
 
-                                        {roles.length > 0 &&
-                                            <>
-                                                <td>{data.active}</td>
-                                                <td>
-                                                    {roles.includes("customer") &&
-                                                        <a className="btn" href="#" onClick={() => {
-                                                            data.quantity = 1;
-                                                            axios.post('/cart/item', data)
-                                                                .then(res => {
-                                                                    window.location.reload()
-                                                                })
-
-                                                        }}>Add
-                                                        </a>
-                                                    }
-                                                    {roles.includes("supplier") &&
-                                                        <>
-                                                            <button className="btn px-3 py-2" onClick={() => {
-
-                                                                notify("Product will only be removed if product has no sales!!")
-                                                                axios.delete('/product/' + data.id)
+                                            {roles.length > 0 &&
+                                                <>
+                                                    <td>{data.active}</td>
+                                                    <td>
+                                                        {roles.includes("customer") &&
+                                                            <a className="btn" href="#" onClick={() => {
+                                                                data.quantity = 1;
+                                                                axios.post('/cart/item', data)
                                                                     .then(res => {
                                                                         window.location.reload()
                                                                     })
-                                                            }}>Remove
-                                                            </button>
-                                                            &nbsp; &nbsp;
-                                                            <button className="btn px-3 py-2" onClick={() => {
-                                                                axios.put('/product/active', {
-                                                                    id: data.id,
-                                                                    active: 'TOGGLE'
-                                                                })
-                                                                    .then(res => {
-                                                                        window.location.reload()
-                                                                    })
-                                                            }}>Toggle Active
-                                                            </button>
-                                                            &nbsp; &nbsp;
-                                                            <button className="btn px-3 py-2" onClick={() => {
-                                                                setState(data)
-                                                                document.getElementById('mdl_edit_product').showModal()
-                                                            }}>
-                                                                Edit
-                                                            </button>
-                                                        </>
-                                                    }
-                                                </td>
 
-                                            </>
-                                        }
-                                    </tr>
-                                )
-                            })}
-                            </tbody>
-                        </table>
+                                                            }}>Add
+                                                            </a>
+                                                        }
+                                                        {roles.includes("supplier") &&
+                                                            <>
+                                                                <button className="btn px-3 py-2" onClick={() => {
+
+                                                                    notify("Product will only be removed if product has no sales!!")
+                                                                    axios.delete('/product/' + data.id)
+                                                                        .then(res => {
+                                                                            window.location.reload()
+                                                                        })
+                                                                }}>Remove
+                                                                </button>
+                                                                &nbsp; &nbsp;
+                                                                <button className="btn px-3 py-2" onClick={() => {
+                                                                    axios.put('/product/active', {
+                                                                        id: data.id,
+                                                                        active: 'TOGGLE'
+                                                                    })
+                                                                        .then(res => {
+                                                                            window.location.reload()
+                                                                        })
+                                                                }}>Toggle Active
+                                                                </button>
+                                                                &nbsp; &nbsp;
+                                                                <button className="btn px-3 py-2" onClick={() => {
+                                                                    setState(data)
+                                                                    document.getElementById('mdl_edit_product').showModal()
+                                                                }}>
+                                                                    Edit
+                                                                </button>
+                                                            </>
+                                                        }
+                                                    </td>
+
+                                                </>
+                                            }
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                </main></div>
+                <div className="col-start-5">&nbsp;</div>
+                <div className="col-span-5 row-start-2 col-start-3">
+                    <footer className="py-16">
+                        Demo WorkWize: Laravel v{laravelVersion} (PHP v{phpVersion})
+                    </footer>
                 </div>
-            </main>
-
-            <footer className="py-16">
-                Demo WorkWize: Laravel v{laravelVersion} (PHP v{phpVersion})
-            </footer>
+            </div>
 
 
             <dialog id="mdl_edit_product" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Edit Product: {state.name}</h3>
-
+                    <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    </form>
                     <input type="hidden" name='id' value={state.id}/>
                     <label>Name:
                         <input className="input" defaultValue={state.name} onChange={event => {
@@ -257,14 +265,16 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                 })
                         }}>Save
                         </button>
-                        <form method="dialog">
-                            <button className="btn">Close</button>
-                        </form>
+
                     </div>
                 </div>
             </dialog>
             <dialog id="mdl_add_product" className="modal">
                 <div className="modal-box">
+                    <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    </form>
                     <form onSubmit={handelSubmit}>
                         <h3 className="font-bold text-lg">Add New Product</h3>
                         <label htmlFor="name">Name:</label>
@@ -284,7 +294,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                             product.price = event.target.value;
                         }}/>
 
-
                         <label htmlFor="active">Active:</label>
                         <select name="active" className="select max-w-xs" onChange={event => {
                             product.active = event.target.value;
@@ -295,12 +304,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
 
                         <div className="modal-action">
                             <button className="btn btn-warning" type="submit">Save</button>
-                            <button className="btn">Close</button>
                         </div>
                     </form>
                 </div>
             </dialog>
         </>
-    )
-        ;
+    );
 }

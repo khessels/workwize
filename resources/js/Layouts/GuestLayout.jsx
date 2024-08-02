@@ -12,7 +12,6 @@ export default function Guest({ children }) {
                             <div className="shrink-0 flex items-center">
                                 {/*<h2>Sales:</h2>*/}
                             </div>
-
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('welcome')}>
                                     Welcome
