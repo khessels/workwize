@@ -23,17 +23,17 @@ class ProductController extends Controller
     }
     public function showSales(Request $request)
     {
-        $usersSales = User::has('carts')->with('carts.items.product')->get();
+        $usersSales = User::has('carts.items')->with('carts.items.product')->get();
         return Inertia::render('Sales', ['sales' => $usersSales]);
     }
     public function delete(Request $request, $productId)
     {
         // only delete a product if it has no sales. If it has no sales, then also remove it from any cart
-        $cartItems = CartItem::where('product_id', $productId)->with(['cart'=>function($query){
+        $soldItems = CartItem::where('product_id', $productId)->with(['cart'=>function($query){
             $query->where('paid','YES');
         }])->get();
 
-        if($cartItems->count() == 0){
+        if($soldItems->count() == 0){
             Product::destroy($productId);
         }
         return response()->noContent();

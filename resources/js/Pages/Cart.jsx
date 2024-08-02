@@ -22,25 +22,24 @@ export default function Cart({ auth, cart }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <button onClick={() => {
+                            <button className="btn" onClick={() => {
                                 axios.post('/cart/checkout');
                                 window.location = '/'
                             }}>Check out
                             </button>
                             <table
-                                className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
+                                className="table hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
                                 <thead>
-                                <tr>
-
-                                    <th>Item Id</th>
-                                    <th>Product Id</th>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
-                                </tr>
+                                    <tr>
+                                        <th>Item Id</th>
+                                        <th>Product Id</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
 
@@ -64,10 +63,8 @@ export default function Cart({ auth, cart }) {
                                         </tr>
                                     )
                                 })}
-
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>

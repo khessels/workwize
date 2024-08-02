@@ -2,10 +2,9 @@ import { Link, Head } from '@inertiajs/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
+import NavLink from "@/Components/NavLink.jsx";
 
 export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount, salesCount, cartItemsCount  }) {
-    const notify_item_added_to_cart = () => toast("Added to cart");
-    const notify_product_removed = () => toast("Product removed from active inventory (Existing carts or sales not affected)");
     const notify = (text) => toast(text);
     const [state, setState] = useState({
         id      : undefined,
@@ -29,170 +28,196 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                 window.location.reload()
             })
     }
+    if(roles.length == 0) {
+        notify("Register and login to start buying")
+    }
     return (
         <>
             <ToastContainer/>
             <Head title="Welcome"/>
-            <h1>Welcome</h1>
-
-            <div className="">
-                <header className="">
-                    <nav className="">
-                        {auth.user ? (
-                            <>
-                                <Link
-                                    className="px-3 py-2"
-                                    method="post" href={route('logout')} as="button">
-                                    Log out
-                                </Link>
-                                <Link
-                                    className="px-3 py-2"
-                                    href={route('profile.edit')}>
-                                    Profile
-                                </Link>
-                                {roles.includes("customer") &&
-                                    <>
-                                        {cartItemsCount > 0 &&
-                                            <>
-                                                <Link
-                                                    href={route('cart')}
-                                                    className="px-3 py-2"
-                                                >
-                                                    <div className="indicator">
-                                                        <span
-                                                            className="indicator-item badge badge-info">{cartItemsCount}</span>
-                                                        <div className="">Cart&nbsp;&nbsp;</div>
-                                                    </div>
-                                                </Link>
-                                            </>
-                                        }
-                                        {cartsHistoryCount > 0 &&
-                                            <Link
-                                                href={route('carts.user.history')}
+            <header className="">
+                <nav className="">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between h-16">
+                            <div className="flex">
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink className="px-3 py-2" href={route('welcome')}>
+                                        Welcome
+                                    </NavLink>
+                                    {auth.user ? (
+                                        <>
+                                            <NavLink
+                                                className="px-3 py-2"
+                                                method="post" href={route('logout')} as="button">
+                                                Log out
+                                            </NavLink>
+                                            <NavLink
+                                                className="px-3 py-2"
+                                                href={route('profile.edit')}>
+                                                Profile
+                                            </NavLink>
+                                            {roles.includes("customer") &&
+                                                <>
+                                                    {cartItemsCount > 0 &&
+                                                        <>
+                                                            <NavLink
+                                                                href={route('cart')}
+                                                                className="px-3 py-2"
+                                                            >
+                                                                <div className="indicator">
+                                                    <span
+                                                        className="indicator-item badge badge-info">{cartItemsCount}</span>
+                                                                    <div className="">Cart&nbsp;&nbsp;</div>
+                                                                </div>
+                                                            </NavLink>
+                                                        </>
+                                                    }
+                                                    {cartsHistoryCount > 0 &&
+                                                        <NavLink
+                                                            href={route('carts.user.history')}
+                                                            className="px-3 py-2"
+                                                        >
+                                                            Previous Purchases
+                                                        </NavLink>
+                                                    }
+                                                </>
+                                            }
+                                            {roles.includes("supplier") &&
+                                                <>
+                                                    {salesCount > 0 &&
+                                                        <NavLink
+                                                            href={route('products.sales')}
+                                                            className="px-3 py-2"
+                                                        >
+                                                            Sales
+                                                        </NavLink>
+                                                    }
+                                                    <NavLink className="px-3 py-2"
+                                                            onClick={(event) => {
+                                                                event.preventDefault();
+                                                                document.getElementById('mdl_add_product').showModal()
+                                                            }}>Add
+                                                        Product
+                                                    </NavLink>
+                                                </>
+                                            }
+                                        </>
+                                    ) : (
+                                        <>
+                                            <NavLink
+                                                href={route('login')}
                                                 className="px-3 py-2"
                                             >
-                                                Previous Purchases
-                                            </Link>
-                                        }
-                                    </>
-                                }
-                                {roles.includes("supplier") &&
-                                    <>
-                                        {salesCount > 0 &&
-                                            <Link
-                                                href={route('products.sales')}
+                                                Log in
+                                            </NavLink>
+                                            <NavLink
+                                                href={route('register')}
                                                 className="px-3 py-2"
                                             >
-                                                Sales
-                                            </Link>
-                                        }
-                                        <button className="btn px-3 py-2"
-                                                onClick={() => document.getElementById('mdl_add_product').showModal()}>Add
-                                            Product
-                                        </button>
-                                    </>
-                                }
-                            </>
-                        ) : (
-                            <>
-                                <Link
-                                    href={route('login')}
-                                    className="px-3 py-2"
-                                >
-                                    Log in
-                                </Link>
-                                <Link
-                                    href={route('register')}
-                                    className="px-3 py-2"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </nav>
-                </header>
+                                                Register
+                                            </NavLink>
+                                        </>
+                                    )}
+                                </div>
 
-                <main>
-                    <div>
-                        <div className="overflow-x-auto">
-                            <table className="table">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Product</th>
-                                    <th>Stock</th>
-                                    <th>Price</th>
-                                    <th>Active</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {products.map(function (data, index) {
-                                    let url = '/product/' + data.id
-                                    return (
-                                        <tr key={index}>
-                                            <td>{data.id}</td>
-                                            <td>{data.name}</td>
-                                            <td>{data.stock}</td>
-                                            <td>{data.price}</td>
-                                            <td>{data.active}</td>
-                                            <td>
-                                                {roles.includes("customer") &&
-                                                    <a className="btn" href="#" onClick={() => {
-                                                        data.quantity = 1;
-                                                        axios.post('/cart/item', data)
-                                                            .then(res => {
-                                                                window.location.reload()
-                                                            })
+                            </div>
 
-                                                    }}>Add
-                                                    </a>
-                                                }
-                                                {roles.includes("supplier") &&
-                                                    <>
-                                                        <button className="btn px-3 py-2" onClick={() => {
-
-                                                            notify("Product will only be removed if product has no sales!!")
-                                                            axios.delete('/product/' + data.id)
-                                                                .then(res => {
-                                                                    window.location.reload()
-                                                                })
-                                                        }}>Remove
-                                                        </button>
-                                                        &nbsp; &nbsp;
-                                                        <button className="btn px-3 py-2" onClick={() => {
-                                                            axios.put('/product/active', {
-                                                                id: data.id,
-                                                                active: 'TOGGLE'
-                                                            })
-                                                                .then(res => {
-                                                                    window.location.reload()
-                                                                })
-                                                        }}>Toggle Active
-                                                        </button>
-                                                        &nbsp; &nbsp;
-                                                        <button className="btn px-3 py-2" onClick={() => {
-                                                            setState(data)
-                                                            document.getElementById('mdl_edit_product').showModal()
-                                                        }}>
-                                                            Edit
-                                                        </button>
-                                                    </>
-                                                }
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
                         </div>
                     </div>
-                </main>
+                </nav>
+            </header>
 
-                <footer className="py-16">
-                    Demo WorkWize: Laravel v{laravelVersion} (PHP v{phpVersion})
-                </footer>
-            </div>
+            <main>
+                <div>
+                    <div className="overflow-x-auto">
+                        <table className="table">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Product</th>
+                                <th>Stock</th>
+                                <th>Price</th>
+                                {roles.length > 0 &&
+                                    <>
+                                        <th>Active</th>
+                                        <th>Action</th>
+                                    </>
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {products.map(function (data, index) {
+                                let url = '/product/' + data.id
+                                return (
+                                    <tr key={index}>
+                                        <td>{data.id}</td>
+                                        <td>{data.name}</td>
+                                        <td>{data.stock}</td>
+                                        <td>{data.price}</td>
+
+                                        {roles.length > 0 &&
+                                            <>
+                                                <td>{data.active}</td>
+                                                <td>
+                                                    {roles.includes("customer") &&
+                                                        <a className="btn" href="#" onClick={() => {
+                                                            data.quantity = 1;
+                                                            axios.post('/cart/item', data)
+                                                                .then(res => {
+                                                                    window.location.reload()
+                                                                })
+
+                                                        }}>Add
+                                                        </a>
+                                                    }
+                                                    {roles.includes("supplier") &&
+                                                        <>
+                                                            <button className="btn px-3 py-2" onClick={() => {
+
+                                                                notify("Product will only be removed if product has no sales!!")
+                                                                axios.delete('/product/' + data.id)
+                                                                    .then(res => {
+                                                                        window.location.reload()
+                                                                    })
+                                                            }}>Remove
+                                                            </button>
+                                                            &nbsp; &nbsp;
+                                                            <button className="btn px-3 py-2" onClick={() => {
+                                                                axios.put('/product/active', {
+                                                                    id: data.id,
+                                                                    active: 'TOGGLE'
+                                                                })
+                                                                    .then(res => {
+                                                                        window.location.reload()
+                                                                    })
+                                                            }}>Toggle Active
+                                                            </button>
+                                                            &nbsp; &nbsp;
+                                                            <button className="btn px-3 py-2" onClick={() => {
+                                                                setState(data)
+                                                                document.getElementById('mdl_edit_product').showModal()
+                                                            }}>
+                                                                Edit
+                                                            </button>
+                                                        </>
+                                                    }
+                                                </td>
+
+                                            </>
+                                        }
+                                    </tr>
+                                )
+                            })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+            <footer className="py-16">
+                Demo WorkWize: Laravel v{laravelVersion} (PHP v{phpVersion})
+            </footer>
+
 
             <dialog id="mdl_edit_product" className="modal">
                 <div className="modal-box">

@@ -1,6 +1,6 @@
 ## About workwize
 
-## build using reactjs, vite, inertia, daisyui, Spatie permissions, Sanctum
+## build using reactjs, vite, inertia, daisyui, Spatie permissions, Sanctum, TailWind
 
 Small Demo app.
 - Assuming a default installation using php8.2+ nginx & mysql server installed on the same server.  

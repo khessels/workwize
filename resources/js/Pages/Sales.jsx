@@ -5,16 +5,16 @@ export default function Sales({ auth, sales }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Sales</h2>}
+            header={<h2 className="font-semibold text-xl leading-tight">Sales</h2>}
         >
             <Head title="Sales" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
+                    <div className="bg-white overflow-hidden sm:rounded-lg">
+                        <div className="p-6 ">
                             <table
-                                className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
+                                className="table hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover dark:block">
                                 <thead>
                                 <tr>
                                     <th>Id</th>
@@ -32,14 +32,9 @@ export default function Sales({ auth, sales }) {
                                                 <td>{user.email}</td>
                                                 <td>{user.name}</td>
                                                 <td>{user.created_at}</td>
-                                                {/*<td>*/}
-                                                {/*    <button onClick={() => {*/}
-                                                {/*    }}> Print invoice ?*/}
-                                                {/*    </button>*/}
-                                                {/*</td>*/}
                                             </tr>
                                             <table
-                                                className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
+                                                className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover dark:block">
                                                 <thead>
                                                 <tr>
                                                     <th>Cart id</th>
@@ -58,7 +53,7 @@ export default function Sales({ auth, sales }) {
                                                                 <td>{cart.updated_at}</td>
                                                             </tr>
                                                             <table
-                                                                className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block">
+                                                                className="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover dark:block">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>Product id</th>
