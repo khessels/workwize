@@ -38,8 +38,13 @@ class PageController extends Controller
         }
 
         if(isNull($products)){
-            $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('name', 'ASC')->get()->toArray();
+            if( in_array( 'supplier', $roles)){
+                $products = Product::orderBy('name', 'ASC')->get()->toArray();
+            }else {
+                $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('name', 'ASC')->get()->toArray();
+            }
         }
+        $cartItemsCount = $this->getCartItemsCount();
 
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
@@ -49,7 +54,8 @@ class PageController extends Controller
             'roles' => $roles,
             'products' => $products,
             'cartsHistoryCount' => $cartsHistoryCount,
-            'salesCount' => $salesCount
+            'salesCount' => $salesCount,
+            'cartItemsCount' => $cartItemsCount,
         ]);
     }
     public function dashboard(Request $request)

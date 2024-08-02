@@ -13,8 +13,8 @@ class CartItem extends Model
     {
         return $this->hasOne('App\Models\Product', 'id', 'product_id');
     }
-    public function cart(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function cart(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->belongsTo('App\Models\Cart', 'id', 'cart_id');
+        return $this->hasOne('App\Models\Cart', 'id', 'cart_id');
     }
 }

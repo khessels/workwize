@@ -25,10 +25,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/cart/item/{id}', [CartController::class, 'removeItem'])->name('cart.item.remove');
     });
     Route::middleware('role:supplier')->group(function () {
-        Route::get('/products/manage', [ProductController::class, 'show'])->name('products.manage');
+        Route::get('/products', [ProductController::class, 'show'])->name('products');
         Route::get('/products/sales', [ProductController::class, 'showSales'])->name('products.sales');
+        Route::put('/product/stock', [ProductController::class, 'setStock'])->name('product.stock.update');
+        Route::put('/product/active', [ProductController::class, 'setActiveState'])->name('product.active.update');
+        Route::put('/product', [ProductController::class, 'update'])->name('product.update');
+        Route::post('/product', [ProductController::class, 'create'])->name('product.create');
+        Route::delete('/product/{productId}', [ProductController::class, 'delete'])->name('product.delete');
     });
-
 });
 
 require __DIR__.'/auth.php';

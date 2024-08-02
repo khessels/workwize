@@ -21,6 +21,14 @@ abstract class Controller
         $with = $this->with($withProduct);
         return Cart::where('user_id', Auth::id())->whereIn('paid', ['NO', 'PROCESSING'])->with($with)->first();
     }
+    protected function getCartItemsCount(bool $withProduct = false)
+    {
+        $cart = $this->getCart($withProduct);
+        if(empty($cart)){
+            return 0;
+        }
+        return $cart->items->count();
+    }
     protected function getCartsHistory(bool $withProduct = false)
     {
         $with = $this->with($withProduct);
@@ -36,10 +44,18 @@ abstract class Controller
     }
     protected function getCartsHistoryCount()
     {
-        return Cart::where('user_id', Auth::id())->whereIn('paid', ['YES'])->with('items')->get()->count();
+        $cart = Cart::where('user_id', Auth::id())->whereIn('paid', ['YES'])->with('items')->get();
+        if(empty($cart)){
+            return 0;
+        }
+        return $cart->count();
     }
     protected function getCartsHistoryAllCount()
     {
-        return Cart::whereIn('paid', ['YES'])->with('items')->get()->count();
+        $cart = Cart::whereIn('paid', ['YES'])->with('items')->get();
+        if(empty($cart)){
+            return 0;
+        }
+        return $cart->count();
     }
 }

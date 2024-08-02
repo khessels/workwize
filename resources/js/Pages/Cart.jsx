@@ -34,7 +34,8 @@ export default function Cart({ auth, cart }) {
                                 <thead>
                                 <tr>
 
-                                    <th>Id</th>
+                                    <th>Item Id</th>
+                                    <th>Product Id</th>
                                     <th>Product</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
@@ -48,6 +49,7 @@ export default function Cart({ auth, cart }) {
                                         <tr key={index}>
 
                                             <td>{item.id}</td>
+                                            <td>{item.product.id}</td>
                                             <td>{item.product.name}</td>
                                             <td>{item.quantity}</td>
                                             <td>{item.product.price}</td>

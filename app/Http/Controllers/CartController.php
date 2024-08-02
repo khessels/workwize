@@ -23,7 +23,8 @@ class CartController extends Controller
         }
         // todo: add provision to Cart page that disables checkout because the cart is currently being processed
         $cartsHistoryCount = $this->getCartsHistoryCount();
-        return Inertia::render('Cart', ['cart' => $cart, 'cartsHistoryCount' => $cartsHistoryCount] );
+
+        return Inertia::render('Cart', ['cart' => $cart, 'cartsHistoryCount' => $cartsHistoryCount, 'cartItemsCount' => $cart->items->count()] );
     }
     public function showHistory(Request $request): Response
     {
@@ -49,8 +50,8 @@ class CartController extends Controller
         if( $cart->items->count() > 0 ) {
             foreach ($cart->items as $item) {
                 if ($item->product_id == $request->id) {
-                    if ($product->stock >= 1) {
-                        $item->quantity += 1;
+                    if ($product->stock >= $request->quantity) {
+                        $item->quantity += $request->quantity;
                         $item->save();
                         return response()->noContent()->setStatusCode(200);
                     }
@@ -58,11 +59,11 @@ class CartController extends Controller
             }
         }
         // did not find an existing article
-        if ($product->stock >= 1) {
+        if ($product->stock >= $request->quantity) {
             $item = new CartItem();
             $item->cart_id = $cart->id;
             $item->product_id = $request->id;
-            $item->quantity = 1;
+            $item->quantity = $request->quantity;
             $item->save();
             return response()->noContent()->setStatusCode(200);
         }
@@ -126,7 +127,6 @@ class CartController extends Controller
                 $item->price = $product->price;
                 $cartTotal += $item->quantity * $product->price;
                 $item->save();
-
             }
 
             // we set the cart to paid and add total
