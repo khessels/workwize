@@ -14,7 +14,7 @@ class Category extends Model
     // https://blog.ghanshyamdigital.com/building-a-self-referencing-model-in-laravel-a-step-by-step-guide
 
     use HasFactory;
-    protected $fillable = ['parent_id', 'english', 'spanish', 'tag', 'active'];
+    protected $fillable = ['id', 'parent_id', 'english', 'spanish', 'tag', 'active'];
 
 
     /**

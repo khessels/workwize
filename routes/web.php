@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:developer')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+        Route::get('/seed', [CategoryController::class, 'seed'])->name('categories.test.seed');
     });
 });
 
