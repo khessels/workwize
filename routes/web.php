@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -12,8 +14,6 @@ use Inertia\Inertia;
 Route::get('/', [PageController::class, 'index'])->name('welcome');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [PageController::class, 'dashboard'])->middleware(['verified'])->name('dashboard');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/product', [ProductController::class, 'update'])->name('product.update');
         Route::post('/product', [ProductController::class, 'create'])->name('product.create');
         Route::delete('/product/{productId}', [ProductController::class, 'delete'])->name('product.delete');
+    });
+    Route::middleware('role:developer')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     });
 });
 

@@ -67,6 +67,14 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                             </NavLink>
                                         </>
                                     }
+                                    {roles.includes("developer") &&
+                                        <NavLink
+                                            href={route('dashboard')}
+                                            className="px-3 py-2"
+                                        >
+                                            Dashboard
+                                        </NavLink>
+                                    }
                                 </>
                             ) : (
                                 <>
