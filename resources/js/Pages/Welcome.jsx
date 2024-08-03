@@ -165,7 +165,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                 .then(res => {
                                     window.location.reload()
                                 })
-                        }}>Save
+                        }}>Add to Cart
                         </button>
                     </div>
                 </div>
