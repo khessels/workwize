@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->index()->primary()->unique();
+            $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
+//            $table->foreign('parent_id')
+//                ->references('id')->on('categories')
+//                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('english')->nullable(false);
             $table->string('spanish')->nullable(true);
             $table->string('tag')->nullable(false);
@@ -23,7 +26,11 @@ return new class extends Migration
         });
         Schema::table('categories', function (Blueprint $table)
         {
-            $table->foreign('parent_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
+            //$table->foreign('parent_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
+            //$table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')
+                ->references('id')->on('categories')
+                ->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
@@ -32,6 +39,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropForeign(['parent_id']);
+            $table->dropColumn(['parent_id']);
+        });
     }
 };

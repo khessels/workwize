@@ -30,19 +30,34 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $roles = ['public'];
+        $isPublic = true;
+        $isAdmin = false;
+        $isCustomer = false;
+        $isSupplier = false;
         if(Auth::check()){
             $roles = Auth::user()->roles->pluck('name');
+            foreach($roles as $role){
+                $isPublic = false;
+                if($role === 'admin'){
+                    $isAdmin = true;
+                }
+                if($role === 'customer'){
+                    $isCustomer = true;
+                }
+                if($role === 'supplier'){
+                    $isSupplier = true;
+                }
+            }
         }
 
-//        $user = $request->user();
-//        $user->roles = $roles;
         return [
             ...parent::share($request),
-
             'auth' => [
                 'user' => $request->user(),
-                'roles' => $roles,
+                'isPublic' => $isPublic,
+                'isAdmin' => $isAdmin,
+                'isCustomer' => $isCustomer,
+                'isSupplier' => $isSupplier
             ],
             'csrf_token' => csrf_token(),
         ];

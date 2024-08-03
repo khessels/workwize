@@ -20,12 +20,14 @@ class PageController extends Controller
 {
     public function index(Request $request)
     {
-        $roles = [];
+        $roles = ['poblic'];
         $cartsHistoryCount = 0;
         $salesCount = 0;
         $products = null;
-
-        if(in_array('supplier', $roles)){
+        if( Auth::check()){
+            $roles =  Auth::user()->roles->pluck('name')->toArray();
+        }
+        if(in_array('supplier', $roles) || in_array('supplier', $roles)){
             $products = Product::orderBy('name', 'ASC')->get()->toArray();
             $salesCount = $this->getCartsHistoryAllCount();
         }
@@ -35,17 +37,15 @@ class PageController extends Controller
         }
 
         if(isNull($products)){
-            if( in_array( 'supplier', $roles)){
+            if( in_array( 'supplier', $roles) || in_array( 'admin', $roles)){
                 $products = Product::orderBy('name', 'ASC')->get()->toArray();
             }else {
-                $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('name', 'ASC')->get()->toArray();
+                $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('id', 'ASC')->get()->toArray();
             }
         }
         $cartItemsCount = $this->getCartItemsCount();
 
         return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
             'products' => $products,

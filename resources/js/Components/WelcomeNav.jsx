@@ -1,21 +1,7 @@
 import NavLink from "@/Components/NavLink.jsx";
 
 export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, salesCount }) {
-    let isCustomer = false
-    let isSupplier = false
-    let isAdmin = false
 
-    for(let x = 0; x < auth.user.roles.length; x++){
-        if( auth.user.roles[x].name == 'admin'){
-            isAdmin = true;
-        }
-        if( auth.user.roles[x].name == 'supplier'){
-            isSupplier = true;
-        }
-        if( auth.user.roles[x].name == 'customer'){
-            isCustomer = true;
-        }
-    }
     return (
         <nav className="">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,9 +23,9 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                         href={route('profile.edit')}>
                                         Profile
                                     </NavLink>
-                                    {isCustomer &&
+                                    { auth.isCustomer &&
                                         <>
-                                            {cartItemsCount > 0 &&
+                                            { cartItemsCount > 0 &&
                                                 <>
                                                     <NavLink
                                                         href={route('cart')}
@@ -53,7 +39,7 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                                     </NavLink>
                                                 </>
                                             }
-                                            {cartsHistoryCount > 0 &&
+                                            { cartsHistoryCount > 0 &&
                                                 <NavLink
                                                     href={route('carts.user.history')}
                                                     className="px-3 py-2"
@@ -63,9 +49,9 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                             }
                                         </>
                                     }
-                                    {isSupplier &&
+                                    { auth.isSupplier &&
                                         <>
-                                            {salesCount > 0 &&
+                                            { salesCount > 0 &&
                                                 <NavLink
                                                     href={route('products.sales')}
                                                     className="px-3 py-2"
@@ -82,7 +68,7 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                             </NavLink>
                                         </>
                                     }
-                                    {isAdmin &&
+                                    { auth.isAdmin &&
                                         <NavLink
                                             href={route('dashboard')}
                                             className="px-3 py-2"

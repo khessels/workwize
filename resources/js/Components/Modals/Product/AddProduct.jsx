@@ -18,24 +18,24 @@ export default function AddProduct() {
                 <form onSubmit={handelSubmit}>
                     <h3 className="font-bold text-lg">Add New Product</h3>
                     <label htmlFor="name">Name:</label>
-                    <input type="text" className="input" name="name" onChange={event => {
+                    <input type="text" id="name" className="input" name="name" onChange={event => {
                         product.name = event.target.value;
                     }}/>
 
                     <br/>
                     <label htmlFor="stock">Stock Quantity:</label>
-                    <input name="stock" className="input max-w-xs" type="number" onChange={event => {
+                    <input name="stock" id="stock" className="input max-w-xs" type="number" onChange={event => {
                         product.stock = event.target.value;
                     }}/>
 
                     <br/>
                     <label htmlFor="price">Price:</label>
-                    <input name="price" className="input max-w-xs" type="number" onChange={event => {
+                    <input name="price" id="price" className="input max-w-xs" type="number" onChange={event => {
                         product.price = event.target.value;
                     }}/>
 
                     <label htmlFor="active">Active:</label>
-                    <select name="active" className="select max-w-xs" onChange={event => {
+                    <select name="active" id="active" className="select max-w-xs" onChange={event => {
                         product.active = event.target.value;
                     }}>
                         <option disabled>Select Active state</option>

@@ -8,25 +8,6 @@ import ModalEditProduct from "@/Components/Modals/Product/EditProduct.jsx"
 import WelcomeNav from "@/Components/WelcomeNav.jsx"
 
 export default function Welcome({ auth, laravelVersion, phpVersion, products, cartsHistoryCount, salesCount, cartItemsCount  }) {
-    let isCustomer = false
-    let isSupplier = false
-    let isAdmin     = false
-    let isPublic    = true;
-debugger;
-    for(let x = 0; x < auth.roles.length; x++){
-        if( auth.roles[x].name == 'admin'){
-            isAdmin = true;
-        }
-        if( auth.roles[x].name == 'supplier'){
-            isSupplier = true;
-        }
-        if( auth.roles[x].name == 'customer'){
-            isCustomer = true;
-        }
-        if( auth.roles[x].name == 'customer'){
-            isPublic = true;
-        }
-    }
 
     const notify = (text) => toast(text);
     const [state, setState] = useState({
@@ -51,7 +32,7 @@ debugger;
                 window.location.reload()
             })
     }
-    if(isPublic) {
+    if(auth.isPublic) {
         notify("Register and login to start buying")
     }
     return (
@@ -79,7 +60,7 @@ debugger;
                                         <th>Product</th>
                                         <th>Stock</th>
                                         <th>Price</th>
-                                        { ! isPublic &&
+                                        { ! auth.isPublic &&
                                             <>
                                                 <th>Active</th>
                                                 <th>Action</th>
@@ -97,11 +78,11 @@ debugger;
                                                 <td>{data.stock}</td>
                                                 <td>{data.price}</td>
 
-                                                { ! isPublic &&
+                                                { ! auth.isPublic &&
                                                     <>
                                                         <td>{data.active}</td>
                                                         <td>
-                                                            { isCustomer &&
+                                                            { auth.isCustomer &&
                                                                 <a className="btn" href="#" onClick={() => {
                                                                     data.quantity = 1;
                                                                     setState(data)
@@ -109,7 +90,7 @@ debugger;
                                                                 }}>Add
                                                                 </a>
                                                             }
-                                                            { isSupplier &&
+                                                            { ( auth.isSupplier || auth.isAdmin) &&
                                                                 <>
                                                                     <button className="btn px-3 py-2" onClick={() => {
 
@@ -170,12 +151,11 @@ debugger;
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     </form>
 
-                    <label>Quantity:
-                        <input className="input max-w-xs" type="number" defaultValue="1" max={state.stock}
-                               onChange={event => {
-                                   state.quantity = event.target.value;
-                               }}/>
-                    </label>
+                    <label htmlFor="purchase_quantity">Quantity:</label>
+                    <input name="purchase_quantity" id="purchase_quantity" className="input max-w-xs" type="number" defaultValue="1" max={state.stock}
+                           onChange={event => {
+                               state.quantity = event.target.value;
+                           }}/>
 
                     <div className="modal-action">
                         <button className="btn" type="submit" onClick={() => {
