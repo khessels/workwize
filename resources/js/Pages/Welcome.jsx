@@ -16,15 +16,15 @@ debugger;
     for(let x = 0; x < auth.roles.length; x++){
         if( auth.roles[x].name == 'admin'){
             isAdmin = true;
-            isPublic = false;
         }
         if( auth.roles[x].name == 'supplier'){
             isSupplier = true;
-            isPublic = false;
         }
         if( auth.roles[x].name == 'customer'){
             isCustomer = true;
-            isPublic = false;
+        }
+        if( auth.roles[x].name == 'customer'){
+            isPublic = true;
         }
     }
 

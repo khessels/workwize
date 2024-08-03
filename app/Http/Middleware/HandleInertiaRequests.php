@@ -30,7 +30,11 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $roles = Auth::user()->roles->pluck('name');
+        $roles = ['public'];
+        if(Auth::check()){
+            $roles = Auth::user()->roles->pluck('name');
+        }
+
 //        $user = $request->user();
 //        $user->roles = $roles;
         return [
