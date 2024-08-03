@@ -85,11 +85,8 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                             {roles.includes("customer") &&
                                                                 <a className="btn" href="#" onClick={() => {
                                                                     data.quantity = 1;
-                                                                    axios.post('/cart/item', data)
-                                                                        .then(res => {
-                                                                            window.location.reload()
-                                                                        })
-
+                                                                    setState(data)
+                                                                    document.getElementById('mdl_quantity').showModal()
                                                                 }}>Add
                                                                 </a>
                                                             }
@@ -147,6 +144,32 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
 
             <ModalEditProduct value={state}/>
             <ModalAddProduct/>
+            <dialog id="mdl_quantity" className="modal">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Product: {state.name} (max: {state.stock})</h3>
+                    <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    </form>
+
+                    <label>Quantity:
+                        <input className="input max-w-xs" type="number" defaultValue="1" max={state.stock}
+                               onChange={event => {
+                                   state.quantity = event.target.value;
+                               }}/>
+                    </label>
+
+                    <div className="modal-action">
+                        <button className="btn" type="submit" onClick={() => {
+                            axios.post('/cart/item', state)
+                                .then(res => {
+                                    window.location.reload()
+                                })
+                        }}>Save
+                        </button>
+                    </div>
+                </div>
+            </dialog>
         </>
     );
 }

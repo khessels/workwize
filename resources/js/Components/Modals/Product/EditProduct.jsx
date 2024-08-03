@@ -1,4 +1,4 @@
-export default function AddProduct(value) {
+export default function EditProduct(value) {
     return (
         <dialog id="mdl_edit_product" className="modal">
             <div className="modal-box">
@@ -26,11 +26,15 @@ export default function AddProduct(value) {
                     }}/>
                 </label>
                 <label>Active:
-                    <select className="select max-w-xs" defaultValue={value.value.active} onChange={event => {
+                    <select className="select max-w-xs" onChange={event => {
                         value.value.active = event.target.value;
                     }}>
-                        <option value='YES'>Yes</option>
-                        <option value='NO'>No</option>
+                        <option value="YES" selected={value.value.active === "YES"}>
+                            Yes
+                        </option>
+                        <option value="NO" selected={value.value.active === "NO"}>
+                            No
+                        </option>
                     </select>
                 </label>
                 <div className="modal-action">

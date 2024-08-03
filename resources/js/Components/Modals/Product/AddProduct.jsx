@@ -38,6 +38,7 @@ export default function AddProduct() {
                     <select name="active" className="select max-w-xs" onChange={event => {
                         product.active = event.target.value;
                     }}>
+                        <option disabled>Select Active state</option>
                         <option value='YES'>Yes</option>
                         <option value='NO'>No</option>
                     </select>
