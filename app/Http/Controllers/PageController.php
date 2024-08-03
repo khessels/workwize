@@ -24,9 +24,6 @@ class PageController extends Controller
         $cartsHistoryCount = 0;
         $salesCount = 0;
         $products = null;
-        if(Auth::check()){
-            $roles =  Auth::user()->roles->pluck('name')->toArray();
-        }
 
         if(in_array('supplier', $roles)){
             $products = Product::orderBy('name', 'ASC')->get()->toArray();
@@ -51,7 +48,6 @@ class PageController extends Controller
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
-            'roles' => $roles,
             'products' => $products,
             'cartsHistoryCount' => $cartsHistoryCount,
             'salesCount' => $salesCount,

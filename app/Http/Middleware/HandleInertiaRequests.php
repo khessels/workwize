@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -29,10 +30,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $roles = Auth::user()->roles->pluck('name');
+//        $user = $request->user();
+//        $user->roles = $roles;
         return [
             ...parent::share($request),
+
             'auth' => [
                 'user' => $request->user(),
+                'roles' => $roles,
             ],
             'csrf_token' => csrf_token(),
         ];

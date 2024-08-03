@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/product', [ProductController::class, 'create'])->name('product.create');
         Route::delete('/product/{productId}', [ProductController::class, 'delete'])->name('product.delete');
     });
-    Route::middleware('role:developer')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
         Route::get('/seed', [CategoryController::class, 'seed'])->name('categories.test.seed');

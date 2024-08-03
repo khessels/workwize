@@ -7,7 +7,27 @@ import ModalAddProduct from "@/Components/Modals/Product/AddProduct.jsx"
 import ModalEditProduct from "@/Components/Modals/Product/EditProduct.jsx"
 import WelcomeNav from "@/Components/WelcomeNav.jsx"
 
-export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount, salesCount, cartItemsCount  }) {
+export default function Welcome({ auth, laravelVersion, phpVersion, products, cartsHistoryCount, salesCount, cartItemsCount  }) {
+    let isCustomer = false
+    let isSupplier = false
+    let isAdmin     = false
+    let isPublic    = true;
+debugger;
+    for(let x = 0; x < auth.roles.length; x++){
+        if( auth.roles[x].name == 'admin'){
+            isAdmin = true;
+            isPublic = false;
+        }
+        if( auth.roles[x].name == 'supplier'){
+            isSupplier = true;
+            isPublic = false;
+        }
+        if( auth.roles[x].name == 'customer'){
+            isCustomer = true;
+            isPublic = false;
+        }
+    }
+
     const notify = (text) => toast(text);
     const [state, setState] = useState({
         id      : undefined,
@@ -31,7 +51,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                 window.location.reload()
             })
     }
-    if(roles.length == 0) {
+    if(isPublic) {
         notify("Register and login to start buying")
     }
     return (
@@ -41,7 +61,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
             <header className="">
                 <WelcomeNav
                     auth={auth}
-                    roles={roles}
                     cartItemsCount={cartItemsCount}
                     cartsHistoryCount={cartsHistoryCount}
                     salesCount={salesCount}/>
@@ -60,7 +79,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                         <th>Product</th>
                                         <th>Stock</th>
                                         <th>Price</th>
-                                        {roles.length > 0 &&
+                                        { ! isPublic &&
                                             <>
                                                 <th>Active</th>
                                                 <th>Action</th>
@@ -78,11 +97,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                 <td>{data.stock}</td>
                                                 <td>{data.price}</td>
 
-                                                {roles.length > 0 &&
+                                                { ! isPublic &&
                                                     <>
                                                         <td>{data.active}</td>
                                                         <td>
-                                                            {roles.includes("customer") &&
+                                                            { isCustomer &&
                                                                 <a className="btn" href="#" onClick={() => {
                                                                     data.quantity = 1;
                                                                     setState(data)
@@ -90,7 +109,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                                 }}>Add
                                                                 </a>
                                                             }
-                                                            {roles.includes("supplier") &&
+                                                            { isSupplier &&
                                                                 <>
                                                                     <button className="btn px-3 py-2" onClick={() => {
 
@@ -122,7 +141,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                                 </>
                                                             }
                                                         </td>
-
                                                     </>
                                                 }
                                             </tr>

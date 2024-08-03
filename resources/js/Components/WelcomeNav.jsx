@@ -1,6 +1,21 @@
 import NavLink from "@/Components/NavLink.jsx";
 
-export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCount, salesCount }) {
+export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, salesCount }) {
+    let isCustomer = false
+    let isSupplier = false
+    let isAdmin = false
+
+    for(let x = 0; x < auth.user.roles.length; x++){
+        if( auth.user.roles[x].name == 'admin'){
+            isAdmin = true;
+        }
+        if( auth.user.roles[x].name == 'supplier'){
+            isSupplier = true;
+        }
+        if( auth.user.roles[x].name == 'customer'){
+            isCustomer = true;
+        }
+    }
     return (
         <nav className="">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,7 +37,7 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                         href={route('profile.edit')}>
                                         Profile
                                     </NavLink>
-                                    {roles.includes("customer") &&
+                                    {isCustomer &&
                                         <>
                                             {cartItemsCount > 0 &&
                                                 <>
@@ -48,7 +63,7 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                             }
                                         </>
                                     }
-                                    {roles.includes("supplier") &&
+                                    {isSupplier &&
                                         <>
                                             {salesCount > 0 &&
                                                 <NavLink
@@ -67,7 +82,7 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                             </NavLink>
                                         </>
                                     }
-                                    {roles.includes("developer") &&
+                                    {isAdmin &&
                                         <NavLink
                                             href={route('dashboard')}
                                             className="px-3 py-2"
@@ -93,9 +108,7 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                 </>
                             )}
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </nav>

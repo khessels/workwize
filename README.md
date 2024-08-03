@@ -15,7 +15,7 @@ Small Demo app.
 - run migration and seed
 
 This demo uses Spatie permission for role\permission management.
-The user seeder creates three users 1 for developer, 1 for supplier and one for customer
+The user seeder creates three users 1 for admin, 1 for supplier and one for customer
 
 - admin@workwize.com
 - supplier@workwize.com

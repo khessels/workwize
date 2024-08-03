@@ -8,10 +8,11 @@ import { Link } from '@inertiajs/react';
 export default function Authenticated({ user, header, children }) {
     let isCustomer = false
     let isSupplier = false
-    let isDeveloper = false
+    let isAdmin = false
+
     for(let x = 0; x < user.roles.length; x++){
-        if(user.roles[x].name == 'developer'){
-            isDeveloper = true;
+        if(user.roles[x].name == 'admin'){
+            isAdmin = true;
         }
         if(user.roles[x].name == 'supplier'){
             isSupplier = true;
@@ -34,7 +35,7 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('welcome')}>
                                     Welcome
                                 </NavLink>
-                                {isDeveloper &&
+                                {isAdmin &&
                                     <NavLink href={route('dashboard')}>
                                         Dashboard
                                     </NavLink>
