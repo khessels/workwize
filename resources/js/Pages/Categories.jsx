@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 export default function Categories({ auth, categories }) {
     const notify = (text) => toast(text);
-
+    debugger;
     return (
 
         <AuthenticatedLayout
@@ -19,44 +20,45 @@ export default function Categories({ auth, categories }) {
             <div className="grid grid-cols-5 grid-rows-5 gap-4">
                 <div>&nbsp;</div>
                 <div className="col-span-3 bg-white overflow-hidden shadow-sm sm:rounded-lg py-6">
-                    <table
-                        className="table flex-1 rounded-[10px] object-top object-cover dark:block">
-                        <thead>
-                        <tr>
-                            <th>Category Id</th>
-                            <th>Parent Id</th>
-                            <th>English</th>
-                            <th>Spanish</th>
-                            <th>Tag</th>
-                            <th>Active</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
 
-                        {categories.map(function (category, index) {
-                            return (
-                                <tr key={index}>
+                    {/*<table*/}
+                    {/*    className="table flex-1 rounded-[10px] object-top object-cover dark:block">*/}
+                    {/*    <thead>*/}
+                    {/*    <tr>*/}
+                    {/*        <th>Category Id</th>*/}
+                    {/*        <th>Parent Id</th>*/}
+                    {/*        <th>English</th>*/}
+                    {/*        <th>Spanish</th>*/}
+                    {/*        <th>Tag</th>*/}
+                    {/*        <th>Active</th>*/}
+                    {/*        <th>Action</th>*/}
+                    {/*    </tr>*/}
+                    {/*    </thead>*/}
+                    {/*    <tbody>*/}
 
-                                    <td>{category.id}</td>
-                                    <td>{category.parent.id}</td>
-                                    <td>{category.english}</td>
-                                    <td>{category.spanish}</td>
-                                    <td>{category.tag}</td>
-                                    <td>{category.active}</td>
-                                    <td>
-                                        <button className="btn" onClick={() => {
-                                            //axios.delete('/cart/item/' + item.id);
-                                            notify("Executed action")
-                                            Inertia.reload();
-                                        }}>Remove
-                                        </button>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
+                    {/*    {categories.map(function (category, index) {*/}
+                    {/*        return (*/}
+                    {/*            <tr key={index}>*/}
+
+                    {/*                <td>{category.parent.id}</td>*/}
+                    {/*                <td>{category.parent.parent_id}</td>*/}
+                    {/*                <td>{category.parent.english}</td>*/}
+                    {/*                <td>{category.parent.spanish}</td>*/}
+                    {/*                <td>{category.parent.tag}</td>*/}
+                    {/*                <td>{category.parent.active}</td>*/}
+                    {/*                <td>*/}
+                    {/*                    <button className="btn" onClick={() => {*/}
+                    {/*                        //axios.delete('/cart/item/' + item.id);*/}
+                    {/*                        notify("Executed action")*/}
+                    {/*                        Inertia.reload();*/}
+                    {/*                    }}>Remove*/}
+                    {/*                    </button>*/}
+                    {/*                </td>*/}
+                    {/*            </tr>*/}
+                    {/*        )*/}
+                    {/*    })}*/}
+                    {/*    </tbody>*/}
+                    {/*</table>*/}
 
                 </div>
                 <div className="col-start-5">

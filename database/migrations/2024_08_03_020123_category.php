@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // https://blog.ghanshyamdigital.com/building-a-self-referencing-model-in-laravel-a-step-by-step-guide
     /**
      * Run the migrations.
      */
@@ -14,20 +15,13 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
-//            $table->foreign('parent_id')
-//                ->references('id')->on('categories')
-//                ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('english')->nullable(false);
-            $table->string('spanish')->nullable(true);
-            $table->string('tag')->nullable(false);
+            $table->string('name')->nullable(false);
             $table->enum('active', ['YES', 'NO'])->nullable(false);
 
             $table->timestamps();
         });
         Schema::table('categories', function (Blueprint $table)
         {
-            //$table->foreign('parent_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
-            //$table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')
                 ->references('id')->on('categories')
                 ->cascadeOnUpdate()->cascadeOnDelete();

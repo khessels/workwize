@@ -69,12 +69,23 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                         </>
                                     }
                                     { auth.isAdmin &&
-                                        <NavLink
-                                            href={route('dashboard')}
-                                            className="px-3 py-2"
-                                        >
-                                            Dashboard
-                                        </NavLink>
+                                        <>
+                                            <NavLink
+                                                href='#'
+                                                className="px-3 py-2"
+                                                onClick={(event) => {
+                                                    event.preventDefault();
+                                                    document.getElementById('mdl_add_category').showModal()
+                                                }}>
+                                                Add Category
+                                            </NavLink>
+                                            <NavLink
+                                                href={route('dashboard')}
+                                                className="px-3 py-2"
+                                            >
+                                                Dashboard
+                                            </NavLink>
+                                        </>
                                     }
                                 </>
                             ) : (

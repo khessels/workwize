@@ -21,10 +21,17 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = [];
+        $categoryParents = Category::whereNull('parent_id')->get();
+        foreach($categoryParents as $parent){
+            $category['parent'] = $parent;
+            $category['children'] = $parent->childrenRecursive;
+            $categories[] = $category;
+
+        }
         return Inertia::render('Categories', ['categories' => $categories]);
     }
-    public function seed(){
+    public function test(){
 
     }
 }

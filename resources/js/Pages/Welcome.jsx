@@ -6,6 +6,7 @@ import NavLink from "@/Components/NavLink.jsx";
 import ModalAddProduct from "@/Components/Modals/Product/AddProduct.jsx"
 import ModalEditProduct from "@/Components/Modals/Product/EditProduct.jsx"
 import WelcomeNav from "@/Components/WelcomeNav.jsx"
+import ModalAddCategory from "@/Components/Modals/Category/AddCategory.jsx"
 
 export default function Welcome({ auth, laravelVersion, phpVersion, products, cartsHistoryCount, salesCount, cartItemsCount  }) {
 
@@ -121,6 +122,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, ca
                                                                     </button>
                                                                 </>
                                                             }
+
                                                         </td>
                                                     </>
                                                 }
@@ -142,7 +144,8 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, ca
             </main>
 
             <ModalEditProduct value={state}/>
-            <ModalAddProduct/>
+            {/*<ModalAddProduct />*/}
+            <ModalAddCategory />
             <dialog id="mdl_quantity" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Product: {state.name} (max: {state.stock})</h3>
