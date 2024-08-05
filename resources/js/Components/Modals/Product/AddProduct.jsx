@@ -7,7 +7,7 @@ export default function AddProduct() {
                 window.location.reload()
             })
     }
-
+    let product = {};
     return (
         <dialog id="mdl_add_product" className="modal">
             <div className="modal-box">
@@ -38,7 +38,7 @@ export default function AddProduct() {
                     <select name="active" id="active" className="select max-w-xs" onChange={event => {
                         product.active = event.target.value;
                     }}>
-                        <option disabled>Select Active state</option>
+                        <option disabled selected="selected">Select Active state</option>
                         <option value='YES'>Yes</option>
                         <option value='NO'>No</option>
                     </select>
