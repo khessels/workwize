@@ -1,4 +1,6 @@
 import NavLink from "@/Components/NavLink.jsx";
+import {useState} from "react";
+const [mdlAddProductvisible, setAddProductVisible] = useState(false);
 
 export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, salesCount }) {
 
@@ -62,7 +64,8 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                             <NavLink className="px-3 py-2"
                                                      onClick={(event) => {
                                                          event.preventDefault();
-                                                         document.getElementById('mdl_add_product').showModal()
+                                                         //document.getElementById('mdl_add_product').showModal()
+                                                         setAddProductVisible(true)
                                                      }}>Add
                                                 Product
                                             </NavLink>

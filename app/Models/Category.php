@@ -14,7 +14,7 @@ class Category extends Model
     // https://blog.ghanshyamdigital.com/building-a-self-referencing-model-in-laravel-a-step-by-step-guide
 
     use HasFactory;
-    protected $fillable = ['id', 'parent_id', 'name', 'active'];
+    protected $fillable = ['id', 'parent_id', 'label', 'description', 'icon', 'active'];
 
 
     /**
@@ -53,7 +53,7 @@ class Category extends Model
      * This will give model's Children
      * @return HasMany
      */
-    public function children(): HasMany
+    public function childrenWithParent(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
@@ -62,8 +62,8 @@ class Category extends Model
      * This will give model's Children, Children's Children and so on until last node.
      * @return HasMany
      */
-    public function childrenRecursive(): HasMany
+    public function children(): HasMany
     {
-        return $this->children()->with('childrenRecursive');
+        return $this->childrenWithParent()->with('children');
     }
 }

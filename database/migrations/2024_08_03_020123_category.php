@@ -15,7 +15,9 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->string('name')->nullable(false);
+            $table->string('label')->nullable(false);
+            $table->string('data')->nullable(true);
+            $table->string('icon')->nullable(true);
             $table->enum('active', ['YES', 'NO'])->nullable(false);
 
             $table->timestamps();

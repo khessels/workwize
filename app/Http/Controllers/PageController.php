@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +15,7 @@ use Inertia\Response;
 use Illuminate\Foundation\Application;
 //use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route;
+
 use function PHPUnit\Framework\isNull;
 
 class PageController extends Controller
@@ -40,15 +42,20 @@ class PageController extends Controller
             if( in_array( 'supplier', $roles) || in_array( 'admin', $roles)){
                 $products = Product::orderBy('name', 'ASC')->get()->toArray();
             }else {
-                $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('id', 'ASC')->get()->toArray();
+                $products = Product::where('stock', '>', 0)->where('active', 'YES')->orderBy('id', 'ASC')->get()->toArray();
             }
         }
         $cartItemsCount = $this->getCartItemsCount();
+
+        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
+        //$children = $root->children->toArray();
+        $root = $this->convertCategoriesForTreeSelect($root->toArray());
 
         return Inertia::render('Welcome', [
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
             'products' => $products,
+            'categories' => $root,
             'cartsHistoryCount' => $cartsHistoryCount,
             'salesCount' => $salesCount,
             'cartItemsCount' => $cartItemsCount,

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [PageController::class, 'index'])->name('welcome');
+Route::get('/category/tree/items/{rootLabel?}/{parentId?}', [CategoryController::class, 'treeItems'])->name('category.tree.items');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,7 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
-        Route::get('/test', [CategoryController::class, 'test'])->name('categories.test');
+        Route::get('/category/tree/items', [CategoryController::class, 'treeItems'])->name('categories.tree.items');
+        Route::get('/category/tree/items/test', [CategoryController::class, 'test'])->name('categories.tree.items.test');
     });
 });
 
