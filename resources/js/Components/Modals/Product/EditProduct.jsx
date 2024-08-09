@@ -8,35 +8,35 @@ export default function EditProduct(value) {
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                 </form>
                 <input type="hidden" name='id' value={value.value.id}/>
-                <label>Name:
-                    <input className="input" defaultValue={value.value.name} onChange={event => {
-                        value.value.name = event.target.value;
-                    }}/>
-                </label>
+                <label htmlFor="name">Name:</label>
+                <input name="name" className="input" defaultValue={value.value.name} onChange={event => {
+                    value.value.name = event.target.value;
+                }}/>
                 <br/>
-                <label>Stock Quantity:
-                    <input className="input max-w-xs" type="number" defaultValue={value.value.stock} onChange={event => {
-                        value.value.stock = event.target.value;
-                    }}/>
-                </label>
+                <label htmlFor="quantity">Stock Quantity:</label>
+                <input name="quantity" id="quantity" className="input max-w-xs" type="number" defaultValue={value.value.stock}
+                       onChange={event => {
+                           value.value.stock = event.target.value;
+                       }}/>
                 <br/>
-                <label>Price:
-                    <input className="input max-w-xs" type="number" defaultValue={value.value.price} onChange={event => {
-                        value.value.price = event.target.value;
-                    }}/>
-                </label>
-                <label>Active:
-                    <select className="select max-w-xs" onChange={event => {
-                        value.value.active = event.target.value;
-                    }}>
-                        <option value="YES" selected={value.value.active === "YES"}>
-                            Yes
-                        </option>
-                        <option value="NO" selected={value.value.active === "NO"}>
-                            No
-                        </option>
-                    </select>
-                </label>
+                <label htmlFor="price">Price:</label>
+                <input name="price" className="input max-w-xs" type="number" defaultValue={value.value.price}
+                       onChange={event => {
+                           value.value.price = event.target.value;
+                       }}/>
+
+                <label htmlFor="active">Active:</label>
+                <select name="active" className="select max-w-xs" onChange={event => {
+                    value.value.active = event.target.value;
+                }}>
+                    <option value="YES" defaultValue={value.value.active === "YES"}>
+                        Yes
+                    </option>
+                    <option value="NO" defaultValue={value.value.active === "NO"}>
+                        No
+                    </option>
+                </select>
+
                 <div className="modal-action">
                     <button className="btn btn-warning" type="submit" onClick={() => {
                         axios.put('/product', value.value)

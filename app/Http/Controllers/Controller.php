@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
+use stdClass;
 
 abstract class Controller
 {
@@ -16,6 +17,31 @@ abstract class Controller
         }
         return $with;
     }
+    protected function convertCategoriesForTreeSelect($categories){
+        $mutatedCategories = $this->recursiveMutateCategories([$categories]);
+        return [ 'root' => $mutatedCategories];
+    }
+    protected function recursiveMutateCategories($array, $depth = 0)
+    {
+        $newArray = [];
+        foreach( $array as $index => $item)
+        {
+            $item[ 'key'] = (string) $item[ 'id'];
+            if( ! empty( $item[ 'parent_id'])){
+                $item[ 'key'] .= '-' . $item[ 'parent_id'];
+            }
+            unset($item[ 'id']);
+            unset($item[ 'parent_id']);
+            if ( count( $item[ 'children']) > 0 && ! empty( $item[ 'children']))
+            {
+                $item[ 'children'] = $this->recursiveMutateCategories( $item[ 'children'], $depth + 1);
+            }
+            $newArray[] = $item;
+        }
+        return $newArray;
+    }
+
+
     protected function getCart(bool $withProduct = false)
     {
         $with = $this->with($withProduct);
@@ -58,4 +84,5 @@ abstract class Controller
         }
         return $cart->count();
     }
+
 }

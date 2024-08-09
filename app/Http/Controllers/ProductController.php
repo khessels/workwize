@@ -17,16 +17,16 @@ use Inertia\Response;
 class ProductController extends Controller
 {
 
-    public function show(Request $request)
+    public function show(Request $request): Response
     {
         return Inertia::render('Products');
     }
-    public function showSales(Request $request)
+    public function showSales(Request $request): Response
     {
         $usersSales = User::has('carts.items')->with('carts.items.product')->get();
         return Inertia::render('Sales', ['sales' => $usersSales]);
     }
-    public function delete(Request $request, $productId)
+    public function delete(Request $request, $productId): \Illuminate\Http\Response
     {
         // only delete a product if it has no sales. If it has no sales, then also remove it from any cart
         $soldItems = CartItem::where('product_id', $productId)->with(['cart'=>function($query){
@@ -38,7 +38,7 @@ class ProductController extends Controller
         }
         return response()->noContent();
     }
-    public function setActiveState(Request $request)
+    public function setActiveState(Request $request): \Illuminate\Http\Response
     {
         $data = $request->validate([
             'id' =>'required',
@@ -53,14 +53,15 @@ class ProductController extends Controller
         $product->save();
         return response()->noContent();
     }
-    public function setStock(Request $request)
+    public function setStock(Request $request): \Illuminate\Http\Response
     {
         $product = Product::find($request->productId);
         $product->stock = $request->quantity;
         $product->save();
         return response()->noContent();
     }
-    public function update(Request $request){
+    public function update(Request $request): \Illuminate\Http\Response
+    {
         $data = $request->validate([
             'id' =>'required',
             'name' =>'nullable',
@@ -84,7 +85,8 @@ class ProductController extends Controller
         $product->save();
         return response()->noContent();
     }
-    public function create(Request $request){
+    public function create(Request $request): \Illuminate\Http\Response
+    {
         $data = $request->validate([
             'name' =>'required',
             'stock' =>'required',

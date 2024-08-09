@@ -1,6 +1,9 @@
 import NavLink from "@/Components/NavLink.jsx";
+import {useState} from "react";
+const [mdlAddProductvisible, setAddProductVisible] = useState(false);
 
-export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCount, salesCount }) {
+export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, salesCount }) {
+
     return (
         <nav className="">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,9 +25,9 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                         href={route('profile.edit')}>
                                         Profile
                                     </NavLink>
-                                    {roles.includes("customer") &&
+                                    { auth.isCustomer &&
                                         <>
-                                            {cartItemsCount > 0 &&
+                                            { cartItemsCount > 0 &&
                                                 <>
                                                     <NavLink
                                                         href={route('cart')}
@@ -38,7 +41,7 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                                     </NavLink>
                                                 </>
                                             }
-                                            {cartsHistoryCount > 0 &&
+                                            { cartsHistoryCount > 0 &&
                                                 <NavLink
                                                     href={route('carts.user.history')}
                                                     className="px-3 py-2"
@@ -48,9 +51,9 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                             }
                                         </>
                                     }
-                                    {roles.includes("supplier") &&
+                                    { auth.isSupplier &&
                                         <>
-                                            {salesCount > 0 &&
+                                            { salesCount > 0 &&
                                                 <NavLink
                                                     href={route('products.sales')}
                                                     className="px-3 py-2"
@@ -61,9 +64,29 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                             <NavLink className="px-3 py-2"
                                                      onClick={(event) => {
                                                          event.preventDefault();
-                                                         document.getElementById('mdl_add_product').showModal()
+                                                         //document.getElementById('mdl_add_product').showModal()
+                                                         setAddProductVisible(true)
                                                      }}>Add
                                                 Product
+                                            </NavLink>
+                                        </>
+                                    }
+                                    { auth.isAdmin &&
+                                        <>
+                                            <NavLink
+                                                href='#'
+                                                className="px-3 py-2"
+                                                onClick={(event) => {
+                                                    event.preventDefault();
+                                                    document.getElementById('mdl_add_category').showModal()
+                                                }}>
+                                                Add Category
+                                            </NavLink>
+                                            <NavLink
+                                                href={route('dashboard')}
+                                                className="px-3 py-2"
+                                            >
+                                                Dashboard
                                             </NavLink>
                                         </>
                                     }
@@ -85,9 +108,7 @@ export default function WelcomeNav({ auth, roles, cartItemsCount, cartsHistoryCo
                                 </>
                             )}
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </nav>

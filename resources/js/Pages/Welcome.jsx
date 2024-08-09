@@ -1,15 +1,26 @@
 import { Link, Head } from '@inertiajs/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NavLink from "@/Components/NavLink.jsx";
 import ModalAddProduct from "@/Components/Modals/Product/AddProduct.jsx"
 import ModalEditProduct from "@/Components/Modals/Product/EditProduct.jsx"
 import WelcomeNav from "@/Components/WelcomeNav.jsx"
+import ModalAddCategory from "@/Components/Modals/Category/AddCategory.jsx"
+import { TreeSelect } from 'primereact/treeselect';
+import { NodeService } from "@/Components/NodeService"
 
-export default function Welcome({ auth, laravelVersion, phpVersion, roles, products, cartsHistoryCount, salesCount, cartItemsCount  }) {
+export default function Welcome({ auth, laravelVersion, phpVersion, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
+    const [nodes, setNodes] = useState(null);
+    const [selectedNodeKey, setSelectedNodeKey] = useState(null);
+
+    useEffect(() => {
+        NodeService.getTreeNodes().then((data) => setNodes(data));
+    }, []);
+
     const notify = (text) => toast(text);
     const [state, setState] = useState({
+        quantity: undefined,
         id      : undefined,
         stock   : undefined,
         name    : undefined,
@@ -31,9 +42,14 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                 window.location.reload()
             })
     }
-    if(roles.length == 0) {
+    if(auth.isPublic) {
         notify("Register and login to start buying")
     }
+
+    const showModal = () => {
+        setShow(true);
+    }
+
     return (
         <>
             <ToastContainer/>
@@ -41,9 +57,8 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
             <header className="">
                 <WelcomeNav
                     auth={auth}
-                    roles={roles}
                     cartItemsCount={cartItemsCount}
-                    cartsHistoryCount={cartsHistoryCount}
+                    cartsHistoryCount={cagit rtsHistoryCount}
                     salesCount={salesCount}/>
             </header>
 
@@ -60,7 +75,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                         <th>Product</th>
                                         <th>Stock</th>
                                         <th>Price</th>
-                                        {roles.length > 0 &&
+                                        { ! auth.isPublic &&
                                             <>
                                                 <th>Active</th>
                                                 <th>Action</th>
@@ -78,11 +93,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                 <td>{data.stock}</td>
                                                 <td>{data.price}</td>
 
-                                                {roles.length > 0 &&
+                                                { ! auth.isPublic &&
                                                     <>
                                                         <td>{data.active}</td>
                                                         <td>
-                                                            {roles.includes("customer") &&
+                                                            { auth.isCustomer &&
                                                                 <a className="btn" href="#" onClick={() => {
                                                                     data.quantity = 1;
                                                                     setState(data)
@@ -90,7 +105,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                                 }}>Add
                                                                 </a>
                                                             }
-                                                            {roles.includes("supplier") &&
+                                                            { ( auth.isSupplier || auth.isAdmin) &&
                                                                 <>
                                                                     <button className="btn px-3 py-2" onClick={() => {
 
@@ -121,8 +136,8 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                                                     </button>
                                                                 </>
                                                             }
-                                                        </td>
 
+                                                        </td>
                                                     </>
                                                 }
                                             </tr>
@@ -133,7 +148,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                             </div>
                         </div>
                     </div>
-                    <div className="col-start-5">&nbsp;</div>
+                    <div className="col-start-5">
+                        <TreeSelect value={selectedNodeKey} options={nodes} onChange={(e) => setSelectedNodeKey(e.value)} placeholder="Select Item"></TreeSelect>
+                    </div>
                     <div className="col-span-5 row-start-2 col-start-3">
                         <footer className="py-16">
                             Demo WorkWize: Laravel v{laravelVersion} (PHP v{phpVersion})
@@ -143,7 +160,8 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
             </main>
 
             <ModalEditProduct value={state}/>
-            <ModalAddProduct/>
+            <ModalAddProduct categories={categories} show={show} setShow={(bool) => setShow(bool)} />
+            <ModalAddCategory />
             <dialog id="mdl_quantity" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Product: {state.name} (max: {state.stock})</h3>
@@ -152,12 +170,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     </form>
 
-                    <label>Quantity:
-                        <input className="input max-w-xs" type="number" defaultValue="1" max={state.stock}
-                               onChange={event => {
-                                   state.quantity = event.target.value;
-                               }}/>
-                    </label>
+                    <label htmlFor="purchase_quantity">Quantity:</label>
+                    <input name="purchase_quantity" id="purchase_quantity" className="input max-w-xs" type="number" defaultValue="1" max={state.stock}
+                           onChange={event => {
+                               state.quantity = event.target.value;
+                           }}/>
 
                     <div className="modal-action">
                         <button className="btn" type="submit" onClick={() => {
@@ -165,7 +182,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, roles, produ
                                 .then(res => {
                                     window.location.reload()
                                 })
-                        }}>Save
+                        }}>Add to Cart
                         </button>
                     </div>
                 </div>

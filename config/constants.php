@@ -1,7 +1,8 @@
 <?php
 
 $arrAllPermissions = [
-    'Super Admin',
+    'super admin',
+    'developer with full access',
     'order products',
     'view products',
     'manage products',
@@ -11,7 +12,7 @@ return [
 
     'roles' => [
         [
-            'name'=> 'developer',
+            'name'=> 'admin',
             'permissions' => $arrAllPermissions
         ],
         [
