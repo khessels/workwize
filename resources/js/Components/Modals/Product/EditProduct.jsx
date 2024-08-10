@@ -1,4 +1,22 @@
+import {subscribe} from "@/Components/js/Events.js";
+
 export default function EditProduct(value) {
+    subscribe("modal-all", (data) =>{
+        if(data.action === 'show'){
+
+        }else if(data.action === 'hide'){
+
+        }
+    });
+
+    subscribe("modal-product-edit", (data) =>{
+        if(data.action === 'show'){
+
+        }else if(data.action === 'hide'){
+
+        }
+    });
+
     return (
         <dialog id="mdl_edit_product" className="modal">
             <div className="modal-box">

@@ -1,9 +1,6 @@
 import NavLink from "@/Components/NavLink.jsx";
-import {useState} from "react";
-const [mdlAddProductvisible, setAddProductVisible] = useState(false);
-
+import { publish } from "@/Components/js/Events.js";
 export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, salesCount }) {
-
     return (
         <nav className="">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,10 +61,9 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                             <NavLink className="px-3 py-2"
                                                      onClick={(event) => {
                                                          event.preventDefault();
-                                                         //document.getElementById('mdl_add_product').showModal()
-                                                         setAddProductVisible(true)
-                                                     }}>Add
-                                                Product
+                                                         publish('modal-product-add', {action:'show'})
+                                                     }}>
+                                                Add Product
                                             </NavLink>
                                         </>
                                     }
@@ -78,7 +74,7 @@ export default function WelcomeNav({ auth, cartItemsCount, cartsHistoryCount, sa
                                                 className="px-3 py-2"
                                                 onClick={(event) => {
                                                     event.preventDefault();
-                                                    document.getElementById('mdl_add_category').showModal()
+                                                    publish('modal-category-add', {action:'show'})
                                                 }}>
                                                 Add Category
                                             </NavLink>

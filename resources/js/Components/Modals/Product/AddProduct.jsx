@@ -3,14 +3,33 @@ import { TreeSelect } from 'primereact/treeselect';
 import { NodeService } from "@/Components/NodeService"
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { subscribe } from "@/Components/js/Events.js";
 
+export default function AddProduct( categories) {
+    const [isOpen, setIsOpen] = useState(false);
+    subscribe("modal-all", (data) =>{
+        if(data.action === 'show'){
 
-export default function AddProduct( categories, show, setShow) {
+        }else if(data.action === 'hide'){
 
+        }
+    });
+
+    subscribe("modal-product-add", (data) =>{
+        if(data.action === 'show'){
+
+        }else if(data.action === 'hide'){
+
+        }
+    });
     const footerContent = (
         <div>
-            <Button label="No" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
-            <Button label="Yes" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus />
+            <Button label="No" icon="pi pi-times" onClick={() => {
+                //setVisible(false)
+            }} className="p-button-text" />
+            <Button label="Yes" icon="pi pi-check" onClick={() => {
+                //setVisible(false)
+            }} autoFocus />
         </div>
     );
 
@@ -23,19 +42,11 @@ export default function AddProduct( categories, show, setShow) {
             })
     }
     let product = {};
-    const [nodes, setNodes] = useState(null);
-    const [selectedNodeKey, setSelectedNodeKey] = useState(null);
 
     useEffect(() => {
         NodeService.getTreeNodes().then((data) => setNodes(data));
     }, []);
-
-    const [selectedNode, setSelectedNode] = useState(undefined);
-
-    const setSelectedCategory  = async (event)=> {
-        debugger;
-    }
-
+    let show = false;
 
 
     return (

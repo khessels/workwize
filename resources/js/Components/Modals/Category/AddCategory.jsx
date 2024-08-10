@@ -1,10 +1,26 @@
 import {Inertia} from "@inertiajs/inertia";
 import { TreeSelect } from 'primereact/treeselect';
+import {subscribe} from "@/Components/js/Events.js";
 
 export default function AddProduct() {
     let category = undefined;
     let selectedNodeKeys;
-    let nodes
+
+    subscribe("modal-all", (data) =>{
+        if(data.action === 'show'){
+
+        }else if(data.action === 'hide'){
+
+        }
+    });
+
+    subscribe("modal-category-add", (data) =>{
+        if(data.action === 'show'){
+
+        }else if(data.action === 'hide'){
+
+        }
+    });
     const handelSubmit = async (event) => {
         event.preventDefault();
         console.log(category)

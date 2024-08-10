@@ -9,7 +9,6 @@ import WelcomeNav from "@/Components/WelcomeNav.jsx"
 import ModalAddCategory from "@/Components/Modals/Category/AddCategory.jsx"
 import { TreeSelect } from 'primereact/treeselect';
 import { NodeService } from "@/Components/NodeService"
-
 export default function Welcome({ auth, laravelVersion, phpVersion, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
     const [nodes, setNodes] = useState(null);
     const [selectedNodeKey, setSelectedNodeKey] = useState(null);
@@ -46,10 +45,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, ca
         notify("Register and login to start buying")
     }
 
-    const showModal = () => {
-        setShow(true);
-    }
-
     return (
         <>
             <ToastContainer/>
@@ -58,7 +53,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, ca
                 <WelcomeNav
                     auth={auth}
                     cartItemsCount={cartItemsCount}
-                    cartsHistoryCount={cagit rtsHistoryCount}
+                    cartsHistoryCount={cartsHistoryCount}
                     salesCount={salesCount}/>
             </header>
 
@@ -160,7 +155,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products, ca
             </main>
 
             <ModalEditProduct value={state}/>
-            <ModalAddProduct categories={categories} show={show} setShow={(bool) => setShow(bool)} />
+            <ModalAddProduct categories={categories} />
             <ModalAddCategory />
             <dialog id="mdl_quantity" className="modal">
                 <div className="modal-box">
