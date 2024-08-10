@@ -5,6 +5,7 @@ import {subscribe} from "@/Components/js/Events.js";
 export default function AddProduct() {
     let category = undefined;
     let selectedNodeKeys;
+    let nodes
 
     subscribe("modal-all", (data) =>{
         if(data.action === 'show'){
