@@ -30,6 +30,7 @@
         "primeicons": "^7.0.0",
         "primereact": "^10.8.0",
         "react-router-dom": "^6.25.1",
-        "react-toastify": "^10.0.5"
+        "react-toastify": "^10.0.5",
+        "tailwind-merge": "^2.4.0"
     }
 }

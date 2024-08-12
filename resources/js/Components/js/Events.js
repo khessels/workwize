@@ -7,8 +7,14 @@ function unsubscribe(eventName, listener) {
 }
 
 function publish(eventName, data) {
-    const event = new CustomEvent(eventName, { detail: data });
-    document.dispatchEvent(event);
+
+    if(data) {
+        const Event = new CustomEvent(eventName, {detail: data});
+        document.dispatchEvent(Event);
+    }else{
+        const Event = new CustomEvent(eventName);
+        document.dispatchEvent(Event);
+    }
 }
 
 export { publish, subscribe, unsubscribe};

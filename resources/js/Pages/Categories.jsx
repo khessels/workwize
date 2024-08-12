@@ -1,91 +1,67 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedBackendLayout from '@/Layouts/AuthenticatedBackendLayout';
 import {Head, useRemember} from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia'
-import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { useRef, useState, useEffect } from 'react';
+import { Toast } from 'primereact/toast';
+import { Button } from "primereact/button";
+import { TreeTable } from 'primereact/treetable';
+import { Column } from 'primereact/column';
+import { NodeCategories } from '@/Services/NodeCategories.jsx';
+import Dropdown from "@/Components/Dropdown.jsx";
+import {publish} from "@/Components/js/Events.js";
+import ModalAddCategory from "@/Components/Modals/Category/AddCategory.jsx"
 
 export default function Categories({ auth, categories }) {
-    const notify = (text) => toast(text);
-    debugger;
-    return (
 
-        <AuthenticatedLayout
+    const toast = useRef(null);
+    const showToast = (detail, title = 'Categories', severity= 'info') => {
+        toast.current.show({ severity: severity, summary: title, detail: detail });
+    };
+    const [nodes, setNodes] = useState([]);
+    const columns = [
+        { field: 'name', header: 'Name', expander: true },
+        { field: 'size', header: 'Type' },
+        { field: 'type', header: 'Size' }
+    ];
+    useEffect(() => {
+        NodeCategories.getTreeTableNodes().then((data) => setNodes(data));
+    }, []);
+    return (
+        <AuthenticatedBackendLayout
+            auth={auth}
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Categories</h2>}
         >
-            <ToastContainer/>
-            <Head title="Cart"/>
-            <div className="grid grid-cols-5 grid-rows-5 gap-4">
-                <div>&nbsp;</div>
-                <div className="col-span-3 bg-white overflow-hidden shadow-sm sm:rounded-lg py-6">
 
-                    {/*<table*/}
-                    {/*    className="table flex-1 rounded-[10px] object-top object-cover dark:block">*/}
-                    {/*    <thead>*/}
-                    {/*    <tr>*/}
-                    {/*        <th>Category Id</th>*/}
-                    {/*        <th>Parent Id</th>*/}
-                    {/*        <th>English</th>*/}
-                    {/*        <th>Spanish</th>*/}
-                    {/*        <th>Tag</th>*/}
-                    {/*        <th>Active</th>*/}
-                    {/*        <th>Action</th>*/}
-                    {/*    </tr>*/}
-                    {/*    </thead>*/}
-                    {/*    <tbody>*/}
+            <Head title="Categories"/>
+            <Toast ref={toast}/>
 
-                    {/*    {categories.map(function (category, index) {*/}
-                    {/*        return (*/}
-                    {/*            <tr key={index}>*/}
-
-                    {/*                <td>{category.parent.id}</td>*/}
-                    {/*                <td>{category.parent.parent_id}</td>*/}
-                    {/*                <td>{category.parent.english}</td>*/}
-                    {/*                <td>{category.parent.spanish}</td>*/}
-                    {/*                <td>{category.parent.tag}</td>*/}
-                    {/*                <td>{category.parent.active}</td>*/}
-                    {/*                <td>*/}
-                    {/*                    <button className="btn" onClick={() => {*/}
-                    {/*                        //axios.delete('/cart/item/' + item.id);*/}
-                    {/*                        notify("Executed action")*/}
-                    {/*                        Inertia.reload();*/}
-                    {/*                    }}>Remove*/}
-                    {/*                    </button>*/}
-                    {/*                </td>*/}
-                    {/*            </tr>*/}
-                    {/*        )*/}
-                    {/*    })}*/}
-                    {/*    </tbody>*/}
-                    {/*</table>*/}
-
+            <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
+                <div className="w-fixed flex-shrink flex-grow-0 px-4">
+                    <div className="sticky top-0 p-4 w-full h-full">
+                        <Button onClick={(event) => {
+                            event.preventDefault();
+                            publish('modal-category-add', "show")
+                        }}>Add Category</Button>
+                    </div>
                 </div>
-                <div className="col-start-5">
-                    &nbsp;
-                </div>
-                <div className="row-start-2">&nbsp;</div>
-                <div className="col-span-3 row-start-2"></div>
-                {/*<div className="col-span-3 row-start-2 bg-white overflow-hidden shadow-sm sm:rounded-lg py-6">*/}
-                {/*    <button className="btn" onClick={() => {*/}
-                {/*        axios.post('/cart/checkout');*/}
-                {/*        window.location = '/'*/}
-                {/*    }}>Check out*/}
-                {/*    </button>*/}
-                {/*</div>*/}
-                <div className="col-start-5 row-start-2">&nbsp;</div>
-                <div className="col-span-5 row-start-3">&nbsp;</div>
-            </div>
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-
-
-                        </div>
+                <main role="main" className="w-full flex-grow pt-1 px-3">
+                    <div className="h-64 flex bg-blue-500 text-white">
+                        <TreeTable value={nodes} tableStyle={{minWidth: '50rem'}}>
+                            {columns.map((col, i) => (
+                                <Column key={col.field} field={col.field} header={col.header} expander={col.expander}/>
+                            ))}
+                        </TreeTable>
+                    </div>
+                </main>
+                <div className="flex-grow-0 px-2">
+                    <div className="flex sm:flex-col px-2">
+                        Sidebar
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+
+            <ModalAddCategory />
+        </AuthenticatedBackendLayout>
     );
 }

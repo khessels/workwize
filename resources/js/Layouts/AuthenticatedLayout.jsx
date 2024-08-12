@@ -4,23 +4,10 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
+import {publish} from "@/Components/js/Events.js";
 
-export default function Authenticated({ user, header, children }) {
-    let isCustomer = false
-    let isSupplier = false
-    let isAdmin = false
-
-    for(let x = 0; x < user.roles.length; x++){
-        if(user.roles[x].name == 'admin'){
-            isAdmin = true;
-        }
-        if(user.roles[x].name == 'supplier'){
-            isSupplier = true;
-        }
-        if(user.roles[x].name == 'customer'){
-            isCustomer = true;
-        }
-    }
+export default function AuthenticatedLayout({ auth, user, header, children }) {
+    debugger;
     return (
         <div className="min-h-screen">
             <nav className="">
@@ -35,6 +22,13 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('welcome')}>
                                     Welcome
                                 </NavLink>
+                                <NavLink href={route('products')}>
+                                    Products
+                                </NavLink>
+                                <NavLink href={route('categories')}>
+                                    Categories
+                                </NavLink>
+
                                 {isAdmin &&
                                     <NavLink href={route('dashboard')}>
                                         Dashboard
@@ -73,6 +67,10 @@ export default function Authenticated({ user, header, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('categories')}>Manage</Dropdown.Link>
+                                        <Dropdown.Link  onClick={(event) => {
+                                            event.preventDefault();
+                                            publish('modal-category-add', "show")
+                                        }}>Add Category</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>

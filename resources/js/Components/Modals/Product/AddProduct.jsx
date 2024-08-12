@@ -1,35 +1,35 @@
 import { useState, useEffect } from 'react';
 import { TreeSelect } from 'primereact/treeselect';
-import { NodeService } from "@/Components/NodeService"
+import { NodeCategories } from "@/Services/NodeCategories"
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { subscribe } from "@/Components/js/Events.js";
 
 export default function AddProduct( categories) {
-    const [isOpen, setIsOpen] = useState(false);
-    subscribe("modal-all", (data) =>{
-        if(data.action === 'show'){
+    const [nodes, setNodes] = useState({});
 
-        }else if(data.action === 'hide'){
-
+    const [isShow, setShow] = useState(false);
+    subscribe("modals", (data) =>{
+        if(data.detail === 'hide'){
+            setShow(false)
         }
     });
-
     subscribe("modal-product-add", (data) =>{
-        if(data.action === 'show'){
-
-        }else if(data.action === 'hide'){
-
+        if(data.detail === 'show'){
+            setShow(true)
+        }else if(data.detail === 'hide'){
+            setShow(false)
         }
     });
+
     const footerContent = (
         <div>
             <Button label="No" icon="pi pi-times" onClick={() => {
-                //setVisible(false)
-            }} className="p-button-text" />
+                setShow(false)
+            }} className="p-button-text" autoFocus />
             <Button label="Yes" icon="pi pi-check" onClick={() => {
-                //setVisible(false)
-            }} autoFocus />
+                //setShow(false)
+            }} />
         </div>
     );
 
@@ -43,17 +43,15 @@ export default function AddProduct( categories) {
     }
     let product = {};
 
-    useEffect(() => {
-        NodeService.getTreeNodes().then((data) => setNodes(data));
-    }, []);
-    let show = false;
-
+    // useEffect(() => {
+    //     NodeService.getTreeNodes().then((data) => setNodes(data));
+    // }, []);
 
     return (
         <div className="card flex justify-content-center">
             {/*<Button label="Show" icon="pi pi-external-link" onClick={() => setAddProductVisible(true)}/>*/}
-            <Dialog header="Header" visible={show} style={{width: '50vw'}} onHide={() => {
-                if (!visible) return;
+            <Dialog header="Add Product" visible={isShow} style={{width: '50vw'}} onHide={() => {
+                if (!isShow) return;
                 setShow(false);
             }} footer={footerContent}>
                 <p className="m-0">

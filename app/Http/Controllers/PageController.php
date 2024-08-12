@@ -63,7 +63,6 @@ class PageController extends Controller
     }
     public function dashboard(Request $request)
     {
-        $roles =  Auth::user()->roles->pluck('name')->toArray();
-        return Inertia::render('Dashboard', ['roles' => $roles]);
+        return Inertia::render('Dashboard');
     }
 }

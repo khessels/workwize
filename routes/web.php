@@ -15,6 +15,7 @@ Route::get('/', [PageController::class, 'index'])->name('welcome');
 Route::get('/category/tree/items/{rootLabel?}/{parentId?}', [CategoryController::class, 'treeItems'])->name('category.tree.items');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/cart/item', [CartController::class, 'addItem'])->name('cart.item.add');
         Route::delete('/cart/item/{id}', [CartController::class, 'removeItem'])->name('cart.item.remove');
     });
+
     Route::middleware('role:supplier')->group(function () {
         Route::get('/products', [ProductController::class, 'show'])->name('products');
         Route::get('/products/sales', [ProductController::class, 'showSales'])->name('products.sales');
@@ -34,8 +36,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/product', [ProductController::class, 'create'])->name('product.create');
         Route::delete('/product/{productId}', [ProductController::class, 'delete'])->name('product.delete');
     });
+
     Route::middleware('role:admin')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/backend', [DashboardController::class, 'index_backend'])->name('dashboard.backend');
         Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
         Route::get('/category/tree/items', [CategoryController::class, 'treeItems'])->name('categories.tree.items');
         Route::get('/category/tree/items/test', [CategoryController::class, 'test'])->name('categories.tree.items.test');

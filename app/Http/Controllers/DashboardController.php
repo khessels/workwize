@@ -22,5 +22,8 @@ class DashboardController extends Controller
     {
         return Inertia::render('Dashboard');
     }
-
+    public function index_backend(Request $request)
+    {
+        return Inertia::render('BackendDashboard');
+    }
 }

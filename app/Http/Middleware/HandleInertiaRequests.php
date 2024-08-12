@@ -45,7 +45,9 @@ class HandleInertiaRequests extends Middleware
         }
 
         // if user has been authenticated iterate all roles assigned to user and set user assigned roles to true
+        $layout = 'GuestLayout';
         if(Auth::check()){
+            $layout = 'AuthenticatedLayout';
             $roles = Auth::user()->roles->pluck('name');
             $auth['isPublic'] = false;
             foreach($roles as $role){
@@ -53,11 +55,13 @@ class HandleInertiaRequests extends Middleware
                 $auth[$roleIs] = true;
             }
         }
-
+        if($auth['isAdmin'] ){
+            $layout = 'AuthenticatedBackendLayout';
+        }
+        $auth['layout'] = $layout;
         return [
             ...parent::share($request),
             'auth' => $auth,
-            'roles' => $roles,
             'csrf_token' => csrf_token(),
         ];
     }

@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import Dropdown from '@/Components/Dropdown';
+import NavLink from '@/Components/NavLink';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
-import NavLink from "@/Components/NavLink.jsx";
-import Dropdown from "@/Components/Dropdown.jsx";
 import {publish} from "@/Components/js/Events.js";
-
-export default function GuestLayout({ children }) {
+import SideNav from "@/Components/SideNav.jsx"
+export default function AuthenticatedBackendLayout({ auth,  user, header, children }) {
+    debugger;
     return (
         <div className="min-h-screen">
             <nav className="">
@@ -14,19 +17,26 @@ export default function GuestLayout({ children }) {
                             <div className="shrink-0 flex items-center">
                                 {/*<h2>Sales:</h2>*/}
                             </div>
-
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('welcome')}>
                                     Welcome
                                 </NavLink>
-
+                                <NavLink href={route('dashboard')}>
+                                    Dashboard
+                                </NavLink>
                             </div>
-
                         </div>
 
                         <div className="sm:flex sm:items-center sm:ms-6">
                             <div className="ms-3 relative">
-
+                                <NavLink href={route('categories')}>
+                                    Categories
+                                </NavLink>
+                            </div>
+                            <div className="ms-3 relative">
+                                <NavLink href={route('products')}>
+                                    Products
+                                </NavLink>
                             </div>
                             <div className="ms-3 relative">
                                 <Dropdown>
