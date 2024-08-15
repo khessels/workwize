@@ -33,6 +33,7 @@ use App\Http\Middleware\InjectLocaleData;
 
         Route::middleware('role:supplier')->group(function () {
             Route::get('/products', [ProductController::class, 'show'])->name('products');
+            Route::get('/products/category/key/{key}', [ProductController::class, 'getByCategoryKey'])->name('products.category.key');
             Route::get('/products/sales', [ProductController::class, 'showSales'])->name('products.sales');
             Route::put('/product/stock', [ProductController::class, 'setStock'])->name('product.stock.update');
             Route::put('/product/active', [ProductController::class, 'setActiveState'])->name('product.active.update');

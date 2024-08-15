@@ -143,5 +143,9 @@ class ProductController extends Controller
         $product->save();
         return response()->noContent();
     }
-
+    public function getByCategoryKey(Request $request)
+    {
+        $return = [];
+        return response()->json($return);
+    }
 }

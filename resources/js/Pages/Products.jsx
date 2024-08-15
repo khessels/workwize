@@ -20,7 +20,7 @@ import { Toast } from 'primereact/toast';
 export default function Products({ auth, categories }) {
     //debugger;
     const [productNodes, setProductNodes] = useState([]);
-    const [categoryKey, setCategoryKey] = useState([]);
+    const [categoryKey, setCategoryKey] = useState(undefined);
     const [products, setProducts] = useState([]);
 
     const toast = useRef(null);
@@ -32,18 +32,22 @@ export default function Products({ auth, categories }) {
                 event.preventDefault();
                 publish('modal-product-add', "show")
             }}/>
+            <p>Products</p>
             {/*<Button icon="pi pi-print" className="mr-2" />*/}
             {/*<Button icon="pi pi-upload" />*/}
         </React.Fragment>
     );
-
-    useEffect(()=>{
-
-    })
-
+    const updateCategoryKey = (key) => {
+        setCategoryKey(key)
+    }
     useEffect(() => {
-        ServiceProducts.getTreeNodes().then(data => setProducts(data));
+        if(categoryKey !== undefined) {
+            ServiceProducts.getTreeNodes(categoryKey).then(data => {
+                setProducts(data)
+            });
+        }
     }, []);
+
     return (
         <AuthenticatedBackendLayout
             auth={auth}
@@ -57,8 +61,8 @@ export default function Products({ auth, categories }) {
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
                     <div className="sticky top-0 p-4 w-full h-full">
-                        <CategoryTree categories={categories} categoryKey={categoryKey} setCategoryKey={setCategoryKey}/>
-
+                        <CategoryTree categories={categories} updateCategoryKey={updateCategoryKey}/>
+                        <p>Key: {categoryKey}</p>
                     </div>
                 </div>
                 <main role="main" className="w-full flex-grow pt-1 px-3">
