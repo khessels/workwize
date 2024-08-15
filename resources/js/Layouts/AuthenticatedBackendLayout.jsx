@@ -6,8 +6,9 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import {publish} from "@/Components/js/Events.js";
 import SideNav from "@/Components/SideNav.jsx"
+
+
 export default function AuthenticatedBackendLayout({ auth,  user, header, children }) {
-    debugger;
     return (
         <div className="min-h-screen">
             <nav className="">
@@ -24,15 +25,14 @@ export default function AuthenticatedBackendLayout({ auth,  user, header, childr
                                 <NavLink href={route('dashboard')}>
                                     Dashboard
                                 </NavLink>
+                                <NavLink href={route('dashboard.backend')}>
+                                    Backend
+                                </NavLink>
                             </div>
                         </div>
 
                         <div className="sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
-                                <NavLink href={route('categories')}>
-                                    Categories
-                                </NavLink>
-                            </div>
+
                             <div className="ms-3 relative">
                                 <NavLink href={route('products')}>
                                     Products

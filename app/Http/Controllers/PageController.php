@@ -22,7 +22,7 @@ class PageController extends Controller
 {
     public function index(Request $request)
     {
-        $roles = ['poblic'];
+        $roles = ['public'];
         $cartsHistoryCount = 0;
         $salesCount = 0;
         $products = null;

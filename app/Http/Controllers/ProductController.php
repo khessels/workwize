@@ -20,6 +20,12 @@ use function PHPUnit\Framework\isNull;
 
 class ProductController extends Controller
 {
+    public function index(Request $request)
+    {
+        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
+        $root = $this->convertCategoriesForTreeSelect($root->toArray());
+        return Inertia::render('Products', ['categories' => $root['root'][0]['children']]);
+    }
     public function show( Request $request): Response
     {
         $roles = ['poblic'];

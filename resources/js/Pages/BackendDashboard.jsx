@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedBackendLayout';
+import AuthenticatedBackendLayout from '@/Layouts/AuthenticatedBackendLayout';
 import {Head, Link} from '@inertiajs/react';
 
 export default function BackendDashboard({ auth }) {

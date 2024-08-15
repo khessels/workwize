@@ -1,6 +1,6 @@
-## About workwize
+## About myshop
 
-## build using reactjs, vite, inertia, daisyui, Spatie permissions, Sanctum, TailWind
+## build using reactjs, vite, inertia, primereact, Spatie permissions, Sanctum, TailWind
 
 Small Demo app.
 - Assuming a default installation using php8.2+ nginx & mysql server installed on the same server.  
@@ -17,20 +17,20 @@ Small Demo app.
 This demo uses Spatie permission for role\permission management.
 The user seeder creates three users 1 for admin, 1 for supplier and one for customer
 
-- admin@workwize.com
-- supplier@workwize.com
-- customer@workwize.com
+- admin@myshop.com
+- supplier@myshop.com
+- customer@myshop.com
 
 ### Same password for all users
 - password: 1234
 
 ### This project utilises sanctum
 Meaning that if you have issues logging in, please check the "statefull" env var 
-The domain used for development is local.workwize.com (on wsl ubuntu) so 
-the statefull domain added to the sanctum config is .workwize.com
+The domain used for development is local.myshop.com (on wsl ubuntu) so 
+the statefull domain added to the sanctum config is .myshop.com
 
 ### nginx config
-a simple non https virtual server config for local.workwize.com please adapt paths accordingly
+a simple non https virtual server config for local.myshop.com please adapt paths accordingly
 it is for php-fpm 8.2/8.3, so you might have to change that to your php version. 
 Try to keep it 8.2 or above.
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TreeSelect } from 'primereact/treeselect';
-import { NodeCategories } from "@/Services/NodeCategories"
+import { ServiceCategories } from "@/Services/Categories"
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { subscribe } from "@/Components/js/Events.js";

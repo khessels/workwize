@@ -1,62 +1,54 @@
-import { Head } from '@inertiajs/react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useState, useEffect } from 'react';
-import SideNav from "@/Components/SideNav.jsx"
-import ModalAddProduct from "@/Components/Modals/Product/AddProduct.jsx"
-import ModalEditProduct from "@/Components/Modals/Product/EditProduct.jsx"
-import ModalQuantity from "@/Components/Modals/Quantity.jsx"
-import {publish, subscribe} from "@/Components/js/Events.js";
+import AuthenticatedBackendLayout from '@/Layouts/AuthenticatedBackendLayout';
+import { Head, useRemember} from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia'
+import React, { useRef, useState, useEffect } from 'react';
+
 import { Button } from "primereact/button";
-import { Inertia} from "@inertiajs/inertia";
-import { Toast} from "primereact/toast";
-import { TreeTable} from "primereact/treetable";
-import { Column} from "primereact/column";
-import AuthenticatedBackendLayout from "@/Layouts/AuthenticatedBackendLayout.jsx";
-import { NodeProducts } from '@/Services/NodeProducts.jsx';
+import { Tree } from 'primereact/tree';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
-export default function Products({ auth, laravelVersion, phpVersion, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
-    const notify = (text) => toast(text);
-    const [state, setState] = useState({
-        quantity: undefined,
-        id      : undefined,
-        stock   : undefined,
-        name    : undefined,
-        active  : undefined,
-        price   : undefined
-    });
-    const [product, setProduct] = useState({
-        stock   : 0,
-        name    : '',
-        active  : 'YES',
-        price   : 0
-    });
-    const dlgHeader = "Product Quantity";
-    let cbQuantityEventName = "event-product-quantity";
-    subscribe(cbQuantityEventName, (data) =>{
-        state.quantity = data.detail;
-        axios.post('/cart/item', state)
-            .then(res => {
-                Inertia.reload()
-            })
-    });
-    const handelSubmit = async (event) => {
-        event.preventDefault();
-        console.log(product)
-        axios.post('/product', product)
-            .then(res => {
-                Inertia.reload()
-            })
-    }
-    if(auth.isPublic) {
-        notify("Register and login to start buying")
-    }
+import { ServiceProducts } from '@/Services/Products';
+import Dropdown from "@/Components/Dropdown.jsx";
+import {publish} from "@/Components/js/Events.js";
+import ModalAddProduct from "@/Components/Modals/Product/AddProduct"
+import { Toolbar } from 'primereact/toolbar';
 
+import CategoryTree from  "@/Components/CategoryTree"
+import { Toast } from 'primereact/toast';
+
+export default function Products({ auth, categories }) {
+    //debugger;
+    const [productNodes, setProductNodes] = useState([]);
+    const [categoryKey, setCategoryKey] = useState([]);
+    const [products, setProducts] = useState([]);
+
+    const toast = useRef(null);
+
+
+    const startTableContent = (
+        <React.Fragment>
+            <Button icon="pi pi-plus" className="mr-2" onClick={(event) => {
+                event.preventDefault();
+                publish('modal-product-add', "show")
+            }}/>
+            {/*<Button icon="pi pi-print" className="mr-2" />*/}
+            {/*<Button icon="pi pi-upload" />*/}
+        </React.Fragment>
+    );
+
+    useEffect(()=>{
+
+    })
+
+    useEffect(() => {
+        ServiceProducts.getTreeNodes().then(data => setProducts(data));
+    }, []);
     return (
         <AuthenticatedBackendLayout
             auth={auth}
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Categories</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Products</h2>}
         >
 
             <Head title="Products"/>
@@ -65,99 +57,29 @@ export default function Products({ auth, laravelVersion, phpVersion, products, c
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
                     <div className="sticky top-0 p-4 w-full h-full">
-                        <Button onClick={(event) => {
-                            event.preventDefault();
-                            publish('modal-product-add', "show")
-                        }}>Add Product</Button>
+                        <CategoryTree categories={categories} categoryKey={categoryKey} setCategoryKey={setCategoryKey}/>
+
                     </div>
                 </div>
                 <main role="main" className="w-full flex-grow pt-1 px-3">
-                    <div className="flex">
-                        <div className="overflow-x-auto">
-                            <table className="table">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Product</th>
-                                    <th>Stock</th>
-                                    <th>Price</th>
-                                    {!auth.isPublic &&
-                                        <>
-                                            <th>Active</th>
-                                            <th>Action</th>
-                                        </>
-                                    }
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {products.map(function (data, index) {
-                                    let url = '/product/' + data.id
-                                    return (
-                                        <tr key={index}>
-                                            <td>{data.id}</td>
-                                            <td>{data.name}</td>
-                                            <td>{data.stock}</td>
-                                            <td>{data.price}</td>
+                    <div className="card">
+                        <Toolbar start={startTableContent}/>
+                    </div>
+                    <div className="card h-64 flex bg-blue-500 text-white">
+                        {/*<TreeTable value={productNodes} tableStyle={{minWidth: '50rem'}} paginator rows={25}*/}
+                        {/*           rowsPerPageOptions={[25, 50, 100]}>*/}
+                        {/*    <Column field="label" header="Name" expander></Column>*/}
+                        {/*    <Column field="icon" header="Icon"></Column>*/}
+                        {/*    <Column field="key" header="Key"></Column>*/}
+                        {/*</TreeTable>*/}
 
-                                            {!auth.isPublic &&
-                                                <>
-                                                    <td>{data.active}</td>
-                                                    <td>
-                                                        {auth.isCustomer &&
-                                                            <>
-                                                                <Button onClick={() => {
-                                                                    data.quantity = 1;
-                                                                    setState(data)
-                                                                    publish('modal-quantity', "show")
-                                                                }}>Add
-                                                                </Button>
-                                                                &nbsp;
-                                                            </>
-                                                        }
-                                                        {(auth.isSupplier || auth.isAdmin) &&
-                                                            <>
-                                                                <Button onClick={() => {
+                        <DataTable value={productNodes} tableStyle={{minWidth: '50rem'}}>
+                            <Column field="key" header="Key"></Column>
+                            <Column field="label" header="Name"></Column>
+                            <Column field="data" header="Description"></Column>
+                            <Column field="quantity" header="Quantity"></Column>
+                        </DataTable>
 
-                                                                    axios.delete('/product/' + data.id)
-                                                                        .then(res => {
-                                                                            if (res.data === 'DELETED') {
-                                                                                Inertia.reload()
-                                                                            } else {
-                                                                                notify("Product will only be removed if product has no sales!!")
-                                                                            }
-                                                                        })
-                                                                }}>Remove
-                                                                </Button>
-                                                                &nbsp;
-                                                                <Button onClick={() => {
-                                                                    axios.put('/product/active', {
-                                                                        id: data.id,
-                                                                        active: 'TOGGLE'
-                                                                    })
-                                                                        .then(res => {
-                                                                            Inertia.reload()
-                                                                        })
-                                                                }}>Toggle Active
-                                                                </Button>
-                                                                &nbsp;
-                                                                <Button onClick={() => {
-                                                                    setState(data)
-                                                                    publish('modal-product-edit', "show")
-                                                                }}>
-                                                                    Edit
-                                                                </Button>
-                                                            </>
-                                                        }
-
-                                                    </td>
-                                                </>
-                                            }
-                                        </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </main>
                 <div className="flex-grow-0 px-2">
@@ -166,17 +88,7 @@ export default function Products({ auth, laravelVersion, phpVersion, products, c
                     </div>
                 </div>
             </div>
-            <ModalEditProduct value={state}/>
-            <ModalAddProduct categories={categories}/>
-            <ModalQuantity
-                dlgHeader={dlgHeader}
-                initialValue={1}
-                minValue={1}
-                maxValue={10}
-                closeOnSubmit={true}
-                cbEventName={cbQuantityEventName}
-            />
+            <ModalAddProduct />
         </AuthenticatedBackendLayout>
-
     );
 }

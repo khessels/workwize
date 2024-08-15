@@ -1,4 +1,4 @@
-export const NodeCategories = {
+export const ServiceCategories = {
     getTreeNodesData() {
         return [
             {
@@ -421,8 +421,18 @@ export const NodeCategories = {
         ];
     },
 
+    getCategories(){
+        axios.get('/category/tree/root')
+            .then(response=> {
+                debugger;
+            })
+    },
     getTreeTableNodes() {
-        return Promise.resolve(this.getTreeTableNodesData());
+        //return Promise.resolve(this.getTreeTableNodesData());
+        // axios.get('/category/tree/root')
+        //     .then(response=> {
+        //         debugger;
+        //     })
     },
 
     getTreeNodes() {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Inertia } from "@inertiajs/inertia";
 import { TreeSelect } from 'primereact/treeselect';
 import { subscribe } from "@/Components/js/Events.js";
-import { NodeCategories } from "@/Services/NodeCategories.jsx"
+import { ServiceCategories } from "@/Services/Categories.jsx"
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 
@@ -36,7 +36,7 @@ export default function AddProduct() {
     }
 
     useEffect(() => {
-        NodeCategories.getTreeNodes().then((data) => setNodes(data));
+        ServiceCategories.getTreeNodes().then((data) => setNodes(data));
     }, []);
 
     const footerContent = (
