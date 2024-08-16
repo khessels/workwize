@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('tag', function (Blueprint $table) {
             $table->id();
+            $table->string('topic')->nullable(false);
             $table->string('tag')->nullable(false);
-            $table->string('tag_category')->nullable(false);
-            $table->enum('active', ['YES', 'NO'])->nullable(false);
+            $table->dateTime('enables_at')->nullable(true);
+            $table->dateTime('expires_at')->nullable(true);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('tag');
     }
 };

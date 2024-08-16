@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
                     UsersSeeder::class,
                     CategorySeeder::class,
                     ProductsSeeder::class,
+                    TagSeeder::class,
                 ];
                 break;
         }
