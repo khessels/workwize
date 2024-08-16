@@ -34,15 +34,20 @@ export default function Products({ auth, categories }) {
         </React.Fragment>
     );
     const updateCategoryKey = (key) => {
-        setCategoryKey(key)
+        axios.get('/products/category/key/' + key)
+            .then(response => {
+                setProducts( response.data);
+            })
     }
-    useEffect(() => {
-        if(categoryKey !== undefined) {
-            ServiceProducts.getTreeNodes(categoryKey).then(data => {
-                setProducts(data)
-            });
-        }
-    }, []);
+    // useEffect(() => {
+    //     console.log("useEffect ")
+    //     if(categoryKey !== undefined) {
+    //         console.log("1: " + categoryKey)
+    //         ServiceProducts.getTreeNodes(categoryKey).then(data => {
+    //             setProducts(data)
+    //         });
+    //     }
+    // }, []);
 
     return (
         <AuthenticatedBackendLayout
@@ -65,7 +70,7 @@ export default function Products({ auth, categories }) {
                     <div className="card">
                         <Toolbar start={startTableContent}/>
                     </div>
-                    <div className="card h-64 flex bg-blue-500 text-white">
+                    <div className="card h-64 flex">
                         {/*<TreeTable value={productNodes} tableStyle={{minWidth: '50rem'}} paginator rows={25}*/}
                         {/*           rowsPerPageOptions={[25, 50, 100]}>*/}
                         {/*    <Column field="label" header="Name" expander></Column>*/}
@@ -73,11 +78,12 @@ export default function Products({ auth, categories }) {
                         {/*    <Column field="key" header="Key"></Column>*/}
                         {/*</TreeTable>*/}
 
-                        <DataTable value={productNodes} tableStyle={{minWidth: '50rem'}}>
-                            <Column field="key" header="Key"></Column>
-                            <Column field="label" header="Name"></Column>
-                            <Column field="data" header="Description"></Column>
-                            <Column field="quantity" header="Quantity"></Column>
+                        <DataTable value={products} tableStyle={{minWidth: '50rem'}}>
+                            <Column field="id" header="Id"></Column>
+                            <Column field="name" header="name"></Column>
+                            <Column field="price" header="Price"></Column>
+                            <Column field="stock" header="Stock"></Column>
+                            <Column field="tags" header="Tags"></Column>
                         </DataTable>
 
                     </div>

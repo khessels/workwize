@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Application;
@@ -143,9 +144,13 @@ class ProductController extends Controller
         $product->save();
         return response()->noContent();
     }
-    public function getByCategoryKey(Request $request)
+    public function getByCategoryKey(Request $request, $key): \Illuminate\Http\JsonResponse
     {
-        $return = [];
-        return response()->json($return);
+        $exploded = explode('-', $key);
+        $parentId = $exploded[1];
+        $id = $exploded[0];
+        $productIds = ProductCategory::where('id', $id)->where('parent_id', $parentId)->get()->pluck('product_id')->toArray();
+        $products = Product::whereIn('id', $productIds)->get();
+        return response()->json($products);
     }
 }

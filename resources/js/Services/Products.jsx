@@ -4,7 +4,7 @@ export const ServiceProducts = {
         console.log("requesting: " + categoryKey)
         await axios.get('/products/category/key/' + categoryKey)
             .then(response => {
-                return categoryKey;
+                return response.data;
             })
     },
 

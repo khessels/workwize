@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 
@@ -23,15 +25,6 @@ class CategoryController extends Controller
     }
     public function test()
     {
-        $categories = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first()->toArray();
 
-
-        foreach( $categories as $category){
-            $products = Product::factory()->count(20)->create();
-            foreach($products as $product){
-                $product->parent_id = $category['id'];
-                $product->save();
-            }
-        }
     }
 }
