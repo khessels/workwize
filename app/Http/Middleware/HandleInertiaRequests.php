@@ -55,10 +55,12 @@ class HandleInertiaRequests extends Middleware
                 $auth[$roleIs] = true;
             }
         }
-        if($auth['isAdmin'] ){
-            $layout = 'AuthenticatedBackendLayout';
+        if(!empty( $auth[ 'isAdmin'])) {
+            if ($auth['isAdmin']) {
+                $layout = 'AuthenticatedBackendLayout';
+            }
         }
-        $auth['layout'] = $layout;
+        $auth[ 'layout'] = $layout;
         return [
             ...parent::share($request),
             'auth' => $auth,

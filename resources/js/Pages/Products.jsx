@@ -4,7 +4,6 @@ import { Inertia } from '@inertiajs/inertia'
 import React, { useRef, useState, useEffect } from 'react';
 
 import { Button } from "primereact/button";
-import { Tree } from 'primereact/tree';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
@@ -18,13 +17,10 @@ import CategoryTree from  "@/Components/CategoryTree"
 import { Toast } from 'primereact/toast';
 
 export default function Products({ auth, categories }) {
-    //debugger;
     const [productNodes, setProductNodes] = useState([]);
     const [categoryKey, setCategoryKey] = useState(undefined);
     const [products, setProducts] = useState([]);
-
     const toast = useRef(null);
-
 
     const startTableContent = (
         <React.Fragment>

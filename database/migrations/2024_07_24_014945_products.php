@@ -22,22 +22,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('product_category', function (Blueprint $table) {
-            //$table->id();
-            $table->unsignedBigInteger('id')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')
-                ->references('id')
-                ->on('products')
-                ->onDelete(' cascade');
-//            $table->string('label')->nullable(false);
-//            $table->string('data')->nullable(true);
-//            $table->string('icon')->nullable(true);
-//            $table->enum('active', ['YES', 'NO'])->nullable(false);
-
-            $table->timestamps();
-        });
 
 //        Schema::table('categories', function (Blueprint $table)
 //        {

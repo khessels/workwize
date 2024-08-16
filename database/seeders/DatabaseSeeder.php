@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
                 $seeds = [
                     PermissionsSeeder::class,
                     UsersSeeder::class,
-                    ProductsSeeder::class,
                     CategorySeeder::class,
+                    ProductsSeeder::class,
                 ];
                 break;
         }

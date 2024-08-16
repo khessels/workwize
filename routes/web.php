@@ -46,7 +46,7 @@ use App\Http\Middleware\InjectLocaleData;
             Route::get('/backend', [DashboardController::class, 'index_backend'])->name('dashboard.backend');
             Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
             Route::get('/category/tree/items', [CategoryController::class, 'treeItems'])->name('categories.tree.items');
-            Route::get('/category/tree/items/test', [CategoryController::class, 'test'])->name('categories.tree.items.test');
+            Route::get('/category/test', [CategoryController::class, 'test'])->name('categories.test');
         });
     });
 
