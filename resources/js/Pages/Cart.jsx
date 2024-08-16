@@ -71,7 +71,7 @@ export default function Cart({ auth, cart }) {
                 <div className="col-span-3 row-start-2 bg-white overflow-hidden shadow-sm sm:rounded-lg py-6">
                     <button className="btn" onClick={() => {
                         axios.post('/cart/checkout');
-                        window.location = '/'
+                        Inertia.reload();
                     }}>Check out
                     </button>
                 </div>

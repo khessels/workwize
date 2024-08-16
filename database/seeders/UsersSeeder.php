@@ -15,7 +15,7 @@ class UsersSeeder extends Seeder
      * Run the database seeds.
      */
     protected string $pw = '1234';
-    protected string $email = 'admin@workwize.com';
+    protected string $email = 'admin@myshop.com';
     public function users(): array
     {
         $users                  = [];
@@ -33,7 +33,7 @@ class UsersSeeder extends Seeder
         $user['name']           = 'supplier';
         $user['status']         = 'active';
         $user['email_verified_at'] = Carbon::now()->toIso8601String();
-        $user['email']          = 'supplier@workwize.com';
+        $user['email']          = 'supplier@myshop.com';
         $user['password']       = Hash::make($this->pw);
         $user['super_admin']    = false;
         $user['roles']          = [ ['name' => 'supplier'] ];
@@ -43,7 +43,7 @@ class UsersSeeder extends Seeder
         $user['name']           = 'customer';
         $user['status']         = 'active';
         $user['email_verified_at'] = Carbon::now()->toIso8601String();
-        $user['email']          = 'customer@workwize.com';
+        $user['email']          = 'customer@myshop.com';
         $user['password']       = Hash::make($this->pw);
         $user['super_admin']    = false;
         $user['user_type']      = "service";

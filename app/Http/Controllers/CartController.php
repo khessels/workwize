@@ -134,7 +134,7 @@ class CartController extends Controller
             $cart->paid='YES';
             $cart->save();
 
-            // todo: we send some awesome Workwize emails designed by Awesome Workwize designers
+            // todo: we send some awesome myshop emails designed by Awesome Workwize designers
 
         });
 

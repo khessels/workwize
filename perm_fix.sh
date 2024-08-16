@@ -1,7 +1,7 @@
 #Set variables here
 LARAVEL_OWNER=khessels # <-- owner (user)
 LARAVEL_WS_GROUP=www-data # <-- WebServer group
-LARAVEL_ROOT=/home/khessels/workwize.com # <-- Laravel root directory
+LARAVEL_ROOT=/home/khessels/myshop.com # <-- Laravel root directory
 
 # BEGIN Fix Laravel Permissions Script
 
@@ -11,10 +11,10 @@ sudo usermod -a -G ${LARAVEL_WS_GROUP} ${LARAVEL_OWNER}
 # Set files owner/group
 sudo chown -R ${LARAVEL_OWNER}:${LARAVEL_WS_GROUP} ${LARAVEL_ROOT}
 
-# Set correct permissions for directories 
+# Set correct permissions for directories
 sudo find ${LARAVEL_ROOT} -type f -exec chmod 644 {} \;
 
-# Set correct permissions for files 
+# Set correct permissions for files
 sudo find ${LARAVEL_ROOT} -type d -exec chmod 755 {} \;
 
 # Set webserver group for storage + cache folders
