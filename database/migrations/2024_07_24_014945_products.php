@@ -21,6 +21,20 @@ return new class extends Migration
 
             $table->timestamps();
         });
+        Schema::create('product_tags', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id')->index();
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete(' cascade');
+            $table->unsignedBigInteger('tag_id')->nullable(false);
+            $table->foreign('tag_id')
+                ->references('id')
+                ->on('tag')
+                ->onDelete(' cascade');
+            $table->timestamps();
+        });
     }
 
     /**

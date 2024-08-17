@@ -12,8 +12,9 @@ class TagFactory extends Factory
     public function definition(): array
     {
         return [
-            'topic' => $this->faker->name(),
-            'tag'=> $this->faker->name(),
+            'topic' => $this->faker->randomElement(['REPORTING', 'PROMOTION', 'USER', 'CATEGORY', 'PRODUCT', 'CART']),
+            'tag'=> $this->faker->text(8),
+            'visible'=> 'NO',
             'enables_at' => null,
             'expires_at' => null,
         ];

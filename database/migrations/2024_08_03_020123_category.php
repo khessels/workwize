@@ -29,6 +29,21 @@ return new class extends Migration
                 ->references('id')->on('categories')
                 ->cascadeOnUpdate()->cascadeOnDelete();
         });
+
+        Schema::create('category_tags', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('category_id')->index();
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete(' cascade');
+            $table->unsignedBigInteger('tag_id')->nullable(false);
+            $table->foreign('tag_id')
+                ->references('id')
+                ->on('tag')
+                ->onDelete(' cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -40,5 +55,7 @@ return new class extends Migration
             $table->dropForeign(['parent_id']);
             $table->dropColumn(['parent_id']);
         });
+        Schema::dropIfExists('category_tags');
+        Schema::dropIfExists('categories');
     }
 };

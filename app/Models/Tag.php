@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     protected $table = 'tag';
-    protected $fillable = ['topic', 'tag', 'enables_at', 'expires_at'];
+    protected $fillable = ['topic', 'tag', 'visible', 'enables_at', 'expires_at'];
     use HasFactory;
 }

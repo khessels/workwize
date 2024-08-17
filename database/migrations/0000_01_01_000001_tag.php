@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('topic')->nullable(false);
             $table->string('tag')->nullable(false);
+            $table->enum('visible', ['YES','NO'])->nullable(false)->default('NO');
             $table->dateTime('enables_at')->nullable(true);
             $table->dateTime('expires_at')->nullable(true);
             $table->timestamps();
