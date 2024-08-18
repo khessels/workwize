@@ -83,7 +83,7 @@ export default function Products({ auth, categories }) {
                             <Column field="name" header="name"></Column>
                             <Column field="price" header="Price"></Column>
                             <Column field="stock" header="Stock"></Column>
-                            <Column field="tags" header="Tags"></Column>
+                            <Column field="tag_labels" header="Tags"></Column>
                         </DataTable>
 
                     </div>
@@ -94,7 +94,7 @@ export default function Products({ auth, categories }) {
                     </div>
                 </div>
             </div>
-            <ModalAddProduct />
+            <ModalAddProduct categories={categories}/>
         </AuthenticatedBackendLayout>
     );
 }

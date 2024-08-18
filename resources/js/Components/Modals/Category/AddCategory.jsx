@@ -6,7 +6,7 @@ import { ServiceCategories } from "@/Services/Categories.jsx"
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 
-export default function AddProduct() {
+export default function AddProduct( props) {
     const [nodes, setNodes] = useState({});
     const [selectedNodeKey, setSelectedNodeKey] = useState(null);
 
@@ -66,7 +66,7 @@ export default function AddProduct() {
                         <TreeSelect name="categories" value={selectedNodeKey} onChange={(e) => setSelectedNodeKey(e.value)}
                                     options={nodes}
                                     metaKeySelection={false}
-                                    className="md:w-20rem w-full" selectionMode="checkbox" display="chip"
+                                    className="md:w-20rem w-full" selectionMode={props.selectionMode} display="chip"
                                     placeholder="Select Items"></TreeSelect>
                         <br />
                         <Button label="Add As Sibling" severity="secondary"/>

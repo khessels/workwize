@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 
 use App\Models\Tag;
+use App\Models\Topic;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,11 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        $tags = Tag::factory()->count(50)->create();
+        $topics = ['REPORTING', 'PROMOTION', 'USER', 'CATEGORY', 'PRODUCT', 'CART'];
+        foreach( $topics as $key => $topic) {
+            $oTopic = new Topic( ['name' => $topic]);
+            $oTopic->save();
+            Tag::factory()->count(10)->create( [ 'topic_id' => $oTopic->id] );
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,11 @@ use App\Http\Middleware\InjectLocaleData;
             Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
             Route::get('/category/tree/items', [CategoryController::class, 'treeItems'])->name('categories.tree.items');
             Route::get('/category/test', [CategoryController::class, 'test'])->name('categories.test');
+        });
+        Route::middleware('role:admin|supplier')->group(function () {
+            Route::get('/tags/{topic?}', [TagController::class, 'getTags'])->name('tags');
+            Route::get('/tag/topics', [TagController::class, 'getTopics'])->name('tag.topics');
+
         });
     });
 
