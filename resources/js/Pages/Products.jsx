@@ -1,14 +1,11 @@
 import AuthenticatedBackendLayout from '@/Layouts/AuthenticatedBackendLayout';
 import { Head, useRemember} from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia'
 import React, { useRef, useState, useEffect } from 'react';
 
 import { Button } from "primereact/button";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-import { ServiceProducts } from '@/Services/Products';
-import Dropdown from "@/Components/Dropdown.jsx";
 import {publish} from "@/Components/js/Events.js";
 import ModalAddProduct from "@/Components/Modals/Product/AddProduct"
 import { Toolbar } from 'primereact/toolbar';
