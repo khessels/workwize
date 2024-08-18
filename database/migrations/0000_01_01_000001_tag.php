@@ -11,10 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('topic', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable(false);
+            $table->timestamps();
+        });
+
         Schema::create('tag', function (Blueprint $table) {
             $table->id();
-            $table->string('topic')->nullable(false);
-            $table->string('tag')->nullable(false);
+            $table->string('name')->nullable(false);
+            $table->unsignedBigInteger('topic_id')->nullable(false);
+            $table->foreign('topic_id')
+                ->references('id')
+                ->on('topic')
+                ->onDelete(' cascade');
             $table->enum('visible', ['YES','NO'])->nullable(false)->default('NO');
             $table->dateTime('enables_at')->nullable(true);
             $table->dateTime('expires_at')->nullable(true);
@@ -27,6 +37,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('topic');
         Schema::dropIfExists('tag');
     }
 };
