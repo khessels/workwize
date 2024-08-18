@@ -33,7 +33,6 @@
         "react-i18next": "^15.0.1",
         "react-router-dom": "^6.25.1",
         "react-toastify": "^10.0.5",
-        "tailwind-merge": "^2.4.0",
-      "@react-buddy/ide-toolbox": "^2.4.0"
+        "tailwind-merge": "^2.4.0"
     }
 }
