@@ -17,7 +17,6 @@ import CategoryTree from  "@/Components/CategoryTree"
 import { Toast } from 'primereact/toast';
 
 export default function Products({ auth, categories }) {
-    const [productNodes, setProductNodes] = useState([]);
     const [categoryKey, setCategoryKey] = useState(undefined);
     const [products, setProducts] = useState([]);
     const toast = useRef(null);
@@ -39,15 +38,6 @@ export default function Products({ auth, categories }) {
                 setProducts( response.data);
             })
     }
-    // useEffect(() => {
-    //     console.log("useEffect ")
-    //     if(categoryKey !== undefined) {
-    //         console.log("1: " + categoryKey)
-    //         ServiceProducts.getTreeNodes(categoryKey).then(data => {
-    //             setProducts(data)
-    //         });
-    //     }
-    // }, []);
 
     return (
         <AuthenticatedBackendLayout
@@ -71,13 +61,6 @@ export default function Products({ auth, categories }) {
                         <Toolbar start={startTableContent}/>
                     </div>
                     <div className="card h-64 flex">
-                        {/*<TreeTable value={productNodes} tableStyle={{minWidth: '50rem'}} paginator rows={25}*/}
-                        {/*           rowsPerPageOptions={[25, 50, 100]}>*/}
-                        {/*    <Column field="label" header="Name" expander></Column>*/}
-                        {/*    <Column field="icon" header="Icon"></Column>*/}
-                        {/*    <Column field="key" header="Key"></Column>*/}
-                        {/*</TreeTable>*/}
-
                         <DataTable value={products} tableStyle={{minWidth: '50rem'}}>
                             <Column field="id" header="Id"></Column>
                             <Column field="name" header="name"></Column>
@@ -85,7 +68,6 @@ export default function Products({ auth, categories }) {
                             <Column field="stock" header="Stock"></Column>
                             <Column field="tag_labels" header="Tags"></Column>
                         </DataTable>
-
                     </div>
                 </main>
                 <div className="flex-grow-0 px-2">
