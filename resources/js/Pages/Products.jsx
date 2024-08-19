@@ -28,15 +28,15 @@ export default function Products({ auth, categories }) {
                 publish('modal-product-add', "show")
             }}/>
             <p>Products</p>
-            {/*<Button icon="pi pi-print" className="mr-2" />*/}
-            {/*<Button icon="pi pi-upload" />*/}
         </React.Fragment>
     );
     const updateCategoryKey = (key) => {
-        axios.get('/products/category/key/' + key)
-            .then(response => {
-                setProducts( response.data);
-            })
+        if(typeof key !== 'undefined') {
+            axios.get('/products/category/key/' + key)
+                .then(response => {
+                    setProducts(response.data);
+                })
+        }
     }
 
     return (

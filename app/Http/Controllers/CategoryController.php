@@ -23,6 +23,10 @@ class CategoryController extends Controller
         $root = $this->convertCategoriesForTreeSelect($root->toArray());
         return response()->json( $root[0]['children']);
     }
+    public function createSibling(Request $request, $key, $name)
+    {
+        return $this->_response($request, 'OK');
+    }
     public function test()
     {
 

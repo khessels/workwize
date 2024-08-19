@@ -48,6 +48,7 @@ use App\Http\Middleware\InjectLocaleData;
             Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
             Route::get('/category/tree/items', [CategoryController::class, 'treeItems'])->name('categories.tree.items');
             Route::get('/category/test', [CategoryController::class, 'test'])->name('categories.test');
+            Route::post('/category/{key}/sibling/{name}', [CategoryController::class, 'createSibling'])->name('category.create.sibling');
         });
         Route::middleware('role:admin|supplier')->group(function () {
             Route::get('/tags/{topic?}', [TagController::class, 'getTags'])->name('tags');
