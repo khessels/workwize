@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductPrice;
 use App\Models\ProductTag;
+use App\Models\Topic;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Application;
@@ -27,7 +29,10 @@ class ProductController extends Controller
     {
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
         $root = $this->convertCategoriesForTreeSelect($root->toArray());
-        return Inertia::render('Products', ['categories' => $root['root'][0]['children']]);
+
+        return Inertia::render('Products', [
+            'categories' => $root['root'][0]['children']
+        ]);
     }
     public function getById(Request $request, $id)
     {
@@ -126,14 +131,15 @@ class ProductController extends Controller
             $product->save();
 
             $priceSaved = false;
-            if( !empty($data['price'])){
+            if( !empty( $data['price'])){
                 $productPrice = new ProductPrice( ['product_id' => $product->id, 'price' => $data['price'], 'quantity' => 0] );
                 $productPrice->save();
                 $priceSaved = true;
-            }else if( ! empty($data['prices'])){
+
+            }else if( ! empty( $data['prices'])){
                 foreach( $data['prices'] as $price){
-                    $price = ! empty($price['price']) ? $price['price'] : null;
-                    $discount = ! empty($price['discount']) ? $price['discount'] : null;
+                    $price = ! empty( $price[ 'price']) ? $price[ 'price'] : null;
+                    $discount = ! empty( $price[ 'discount']) ? $price[ 'discount'] : null;
                     $productPrice = new ProductPrice( ['product_id' => $product->id, 'price' => $price, 'discount' => $discount, 'quantity' => 0] );
                     $productPrice->save();
                     $priceSaved = true;
@@ -142,10 +148,9 @@ class ProductController extends Controller
             if( ! $priceSaved){
                 return $this->_response('ERROR: No Price(s)');
             }
-
             if( ! empty( $data[ 'categories'])){
                 foreach( $data[ 'categories'] as $key => $category){
-                    if($category['checked']){
+                    if($category[ 'checked']){
                         $ids = explode('-', $key);
                         $productCategory = ['id' => $ids[0], 'parent_id' => $ids[1], 'product_id' => $product->id];
                         $oProductCategory = new ProductCategory($productCategory);
@@ -156,7 +161,7 @@ class ProductController extends Controller
             if( ! empty( $data[ 'tags'])){
                 foreach( $data[ 'tags'] as $tag){
                     $tagComponents = explode('.', $tag);
-                    $productTag = new ProductTag(['product_id' => $product->id, 'tag_id' => $tagComponents[1]]);
+                    $productTag = new ProductTag( [ 'product_id' => $product->id, 'tag_id' => $tagComponents[1]]);
                     $productTag->save();
                 }
             }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductTag;
+use App\Models\Tag;
+use App\Models\Topic;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,12 +28,11 @@ class PageController extends Controller
         $roles = ['public'];
         $cartsHistoryCount = 0;
         $salesCount = 0;
-        $products = null;
+
         if( Auth::check()){
             $roles =  Auth::user()->roles->pluck('name')->toArray();
         }
         if(in_array('supplier', $roles) || in_array('supplier', $roles)){
-            $products = Product::orderBy('name', 'ASC')->get()->toArray();
             $salesCount = $this->getCartsHistoryAllCount();
         }
 
@@ -38,18 +40,17 @@ class PageController extends Controller
             $cartsHistoryCount = $this->getCartsHistoryCount();
         }
 
-        if(isNull($products)){
-            if( in_array( 'supplier', $roles) || in_array( 'admin', $roles)){
-                $products = Product::orderBy('name', 'ASC')->get()->toArray();
-            }else {
-                $products = Product::where('stock', '>', 0)->where('active', 'YES')->orderBy('id', 'ASC')->get()->toArray();
-            }
-        }
         $cartItemsCount = $this->getCartItemsCount();
 
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        //$children = $root->children->toArray();
         $root = $this->convertCategoriesForTreeSelect($root->toArray());
+
+        $topic = Topic::where('name', 'LANDING')->with('tags')->first();
+        $products = [];
+        foreach( $topic->tags as $tag ){
+            $taggedProducts = ProductTag::where('tag_id', $tag->id)->with('product.productCategories')->get();
+            $products[] = ['tag' => $tag->name, 'productTags' => $taggedProducts];
+        }
 
         return Inertia::render('Welcome', [
             'products' => $products,

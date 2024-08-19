@@ -14,4 +14,7 @@ class ProductTag extends Model
     public function tag(){
         return $this->hasOne(Tag::class, 'id', 'tag_id');
     }
+    public function product(){
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
 }

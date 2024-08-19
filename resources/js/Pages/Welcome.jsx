@@ -6,6 +6,7 @@ import {Column} from "primereact/column";
 import { t} from "@/Components/js/t";
 
 export default function Welcome({ auth, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
+    debugger;
     const { localeData } = usePage().props;
     const d = localeData.data
     return (

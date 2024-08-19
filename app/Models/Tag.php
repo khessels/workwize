@@ -14,4 +14,5 @@ class Tag extends Model
      {
          return $this->hasOne(Topic::class, 'id', 'topic_id');
      }
+
 }
