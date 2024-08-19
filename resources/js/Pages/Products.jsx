@@ -34,6 +34,9 @@ export default function Products({ auth, categories }) {
         if(typeof key !== 'undefined') {
             axios.get('/products/category/key/' + key)
                 .then(response => {
+                    for(let x = 0; x < response.data.length; x++){
+                        response.data[x].price = response.data[x].prices[0].price
+                    }
                     setProducts(response.data);
                 })
         }
@@ -53,7 +56,6 @@ export default function Products({ auth, categories }) {
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
                     <div className="sticky top-0 p-4 w-full h-full">
                         <CategoryTree categories={categories} updateCategoryKey={updateCategoryKey}/>
-                        <p>Key: {categoryKey}</p>
                     </div>
                 </div>
                 <main role="main" className="w-full flex-grow pt-1 px-3">

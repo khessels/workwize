@@ -16,6 +16,7 @@ use App\Http\Middleware\InjectLocaleData;
 
     Route::get('/', [PageController::class, 'index'])->name('welcome')->middleware(InjectLocaleData::class);
     Route::get('/category/tree/{rootLabel?}/{parentId?}', [CategoryController::class, 'tree'])->name('category.tree');
+    Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.by.id');
 
     Route::middleware('auth')->group(function () {
 
@@ -38,6 +39,7 @@ use App\Http\Middleware\InjectLocaleData;
             Route::get('/products/sales', [ProductController::class, 'showSales'])->name('products.sales');
             Route::put('/product/stock', [ProductController::class, 'setStock'])->name('product.stock.update');
             Route::put('/product/active', [ProductController::class, 'setActiveState'])->name('product.active.update');
+
             Route::put('/product', [ProductController::class, 'update'])->name('product.update');
             Route::post('/product', [ProductController::class, 'create'])->name('product.create');
             Route::delete('/product/{productId}', [ProductController::class, 'delete'])->name('product.delete');

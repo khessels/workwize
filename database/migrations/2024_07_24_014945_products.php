@@ -17,10 +17,22 @@ return new class extends Migration
             $table->string('tags')->nullable(true);
             $table->enum('active', ['YES', 'NO'])->nullable(false);
             $table->unsignedSmallInteger('stock')->nullable(false)->default(0);
-            $table->double('price', 6, 2)->nullable(false);
-
             $table->timestamps();
         });
+
+        Schema::create('product_price', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id')->index();
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete(' cascade');
+            $table->unsignedSmallInteger('quantity')->nullable(false)->default(0);
+            $table->double('price', 6, 2)->nullable(true);
+            $table->double('discount', 6, 2)->nullable(true);
+            $table->timestamps();
+        });
+
         Schema::create('product_tags', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id')->index();

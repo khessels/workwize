@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductPrice;
 use App\Models\ProductTag;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -28,51 +29,18 @@ class ProductController extends Controller
         $root = $this->convertCategoriesForTreeSelect($root->toArray());
         return Inertia::render('Products', ['categories' => $root['root'][0]['children']]);
     }
+    public function getById(Request $request, $id)
+    {
+        $product = Product::find( $id);
+        return Inertia::render('Product', ['product' => $product]);
+    }
     public function show( Request $request): Response
     {
-        $roles = ['poblic'];
-        $cartsHistoryCount = 0;
-        $salesCount = 0;
-        $products = [];
-        if( Auth::check()){
-            $roles =  Auth::user()->roles->pluck('name')->toArray();
-        }
-//        if(in_array('supplier', $roles) || in_array('admin', $roles)){
-//            $products = Product::orderBy('id', 'ASC')->with('tags.tag.topic')->get()->toArray();
-//            $salesCount = $this->getCartsHistoryAllCount();
-//        }else{
-//            $products = Product::where('stock', '>', 0)->where('active', 'YES')->orderBy('id', 'ASC')->get()->toArray();
-//        }
-
-        if(in_array('customer', $roles)){
-            $cartsHistoryCount = $this->getCartsHistoryCount();
-        }
-
-        // create tag labels
-//        foreach($products as $key => $product){
-//            if( ! empty( $product['tags']) ){
-//                $tags = [];
-//                foreach( $product['tags'] as $tag ){
-//                    $tagName = $tag['tag']['name'];
-//                    $topic =  $tag['tag']['topic']['name'];
-//                    $tags[] = $topic . '.' . $tagName;
-//                }
-//                $products[$key]['tag_labels'] = implode(', ', $tags);
-//            }
-//        }
-        $cartItemsCount = $this->getCartItemsCount();
-
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
         $root = $this->convertCategoriesForTreeSelect($root->toArray());
 
         return Inertia::render('Products', [
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-//            'products' => $products,
-            'categories' => $root,
-            'cartsHistoryCount' => $cartsHistoryCount,
-            'salesCount' => $salesCount,
-            'cartItemsCount' => $cartItemsCount,
+            'categories' => $root
         ]);
     }
     public function showSales( Request $request): Response
@@ -149,12 +117,32 @@ class ProductController extends Controller
                 'category' =>'nullable',
                 'categories' =>'nullable',
                 'stock' =>'required',
-                'price' =>'required',
+                'price' =>'nullable',
+                'prices' => 'nullable',
                 'active' =>'required',
                 'tags'  => 'nullable',
             ]);
             $product = new Product( $data);
             $product->save();
+
+            $priceSaved = false;
+            if( !empty($data['price'])){
+                $productPrice = new ProductPrice( ['product_id' => $product->id, 'price' => $data['price'], 'quantity' => 0] );
+                $productPrice->save();
+                $priceSaved = true;
+            }else if( ! empty($data['prices'])){
+                foreach( $data['prices'] as $price){
+                    $price = ! empty($price['price']) ? $price['price'] : null;
+                    $discount = ! empty($price['discount']) ? $price['discount'] : null;
+                    $productPrice = new ProductPrice( ['product_id' => $product->id, 'price' => $price, 'discount' => $discount, 'quantity' => 0] );
+                    $productPrice->save();
+                    $priceSaved = true;
+                }
+            }
+            if( ! $priceSaved){
+                return $this->_response('ERROR: No Price(s)');
+            }
+
             if( ! empty( $data[ 'categories'])){
                 foreach( $data[ 'categories'] as $key => $category){
                     if($category['checked']){
@@ -182,7 +170,7 @@ class ProductController extends Controller
         $parentId = $exploded[1];
         $id = $exploded[0];
         $productIds = ProductCategory::where('id', $id)->where('parent_id', $parentId)->get()->pluck('product_id')->toArray();
-        $products = Product::whereIn('id', $productIds)->with('tags.tag.topic')->get()->toArray();
+        $products = Product::whereIn('id', $productIds)->with('prices')->with('tags.tag.topic')->get()->toArray();
         foreach($products as $key => $product){
             if( ! empty( $product['tags']) ){
                 $tags = [];

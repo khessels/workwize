@@ -5,7 +5,7 @@ import {TreeTable} from "primereact/treetable";
 import {Column} from "primereact/column";
 import { t} from "@/Components/js/t";
 
-export default function Welcome({ auth, laravelVersion, phpVersion, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
+export default function Welcome({ auth, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
     const { localeData } = usePage().props;
     const d = localeData.data
     return (

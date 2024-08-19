@@ -52,8 +52,6 @@ class PageController extends Controller
         $root = $this->convertCategoriesForTreeSelect($root->toArray());
 
         return Inertia::render('Welcome', [
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
             'products' => $products,
             'categories' => $root,
             'cartsHistoryCount' => $cartsHistoryCount,
