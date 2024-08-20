@@ -36,7 +36,20 @@ return new class extends Migration
             $table->double('price', 6, 2)->nullable(true);
             $table->timestamps();
         });
-
+        Schema::create('cart_tags', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('cart_id')->index();
+            $table->foreign('cart_id')
+                ->references('id')
+                ->on('carts')
+                ->onDelete(' cascade');
+            $table->unsignedBigInteger('tag_id')->nullable(false);
+            $table->foreign('tag_id')
+                ->references('id')
+                ->on('tag')
+                ->onDelete(' cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -46,5 +59,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('carts');
         Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('cart_tags');
     }
 };

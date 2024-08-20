@@ -1,7 +1,7 @@
 server {
     listen 80;
-    server_name local.workwize.com;
-    root /home/khessels/workwize.com/public;
+    server_name local.myshop.com;
+    root /home/khessels/myshop.com/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";

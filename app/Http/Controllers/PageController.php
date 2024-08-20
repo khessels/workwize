@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductTag;
+use App\Models\Tag;
+use App\Models\Topic;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,22 +18,21 @@ use Inertia\Response;
 use Illuminate\Foundation\Application;
 //use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route;
+
 use function PHPUnit\Framework\isNull;
 
 class PageController extends Controller
 {
     public function index(Request $request)
     {
-        $roles = [];
+        $roles = ['public'];
         $cartsHistoryCount = 0;
         $salesCount = 0;
-        $products = null;
-        if(Auth::check()){
+
+        if( Auth::check()){
             $roles =  Auth::user()->roles->pluck('name')->toArray();
         }
-
-        if(in_array('supplier', $roles)){
-            $products = Product::orderBy('name', 'ASC')->get()->toArray();
+        if(in_array('supplier', $roles) || in_array('supplier', $roles)){
             $salesCount = $this->getCartsHistoryAllCount();
         }
 
@@ -37,22 +40,21 @@ class PageController extends Controller
             $cartsHistoryCount = $this->getCartsHistoryCount();
         }
 
-        if(isNull($products)){
-            if( in_array( 'supplier', $roles)){
-                $products = Product::orderBy('name', 'ASC')->get()->toArray();
-            }else {
-                $products = Product::where('stock', '>', 0)->where('Active', 'YES')->orderBy('name', 'ASC')->get()->toArray();
-            }
-        }
         $cartItemsCount = $this->getCartItemsCount();
 
+        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
+        $root = $this->convertCategoriesForTreeSelect($root->toArray());
+
+        $topic = Topic::where('name', 'LANDING')->with('tags')->first();
+        $products = [];
+        foreach( $topic->tags as $tag ){
+            $taggedProducts = ProductTag::where('tag_id', $tag->id)->with('product.productCategories')->get();
+            $products[] = ['tag' => $tag->name, 'productTags' => $taggedProducts];
+        }
+
         return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-            'roles' => $roles,
             'products' => $products,
+            'categories' => $root,
             'cartsHistoryCount' => $cartsHistoryCount,
             'salesCount' => $salesCount,
             'cartItemsCount' => $cartItemsCount,
@@ -60,7 +62,6 @@ class PageController extends Controller
     }
     public function dashboard(Request $request)
     {
-        $roles =  Auth::user()->roles->pluck('name')->toArray();
-        return Inertia::render('Dashboard', ['roles' => $roles]);
+        return Inertia::render('Dashboard');
     }
 }

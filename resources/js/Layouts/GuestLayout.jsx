@@ -1,8 +1,10 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 import NavLink from "@/Components/NavLink.jsx";
+import Dropdown from "@/Components/Dropdown.jsx";
+import {publish} from "@/Components/js/Events.js";
 
-export default function Guest({ children }) {
+export default function GuestLayout({ children }) {
     return (
         <div className="min-h-screen">
             <nav className="">
@@ -17,7 +19,6 @@ export default function Guest({ children }) {
                                     Welcome
                                 </NavLink>
                             </div>
-
                         </div>
                     </div>
                 </div>

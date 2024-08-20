@@ -14,7 +14,6 @@ class ProductFactory extends Factory
         return [
             'name' =>  $this->faker->name(),
             'active'=> 'YES',
-            'price' => $this->faker->numberBetween($min = 5, $max = 200),
             'stock' => $this->faker->numberBetween($min = 0, $max = 10),
         ];
     }

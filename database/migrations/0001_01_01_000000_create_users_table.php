@@ -35,6 +35,20 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+        Schema::create('user_tags', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete(' cascade');
+            $table->unsignedBigInteger('tag_id')->nullable(false);
+            $table->foreign('tag_id')
+                ->references('id')
+                ->on('tag')
+                ->onDelete(' cascade');
+            $table->timestamps();
+        });
     }
 
     /**
