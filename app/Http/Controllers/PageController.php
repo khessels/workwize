@@ -42,18 +42,18 @@ class PageController extends Controller
 
         $cartItemsCount = $this->getCartItemsCount();
 
-        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForTreeSelect($root->toArray());
+        $root = Category::where('label', 'root')->whereNull('parent_id')->with('items')->first();
+        $root = $this->convertCategoriesForPRComponent($root->toArray(), 'items');
 
         $topic = Topic::where('name', 'LANDING')->with('tags')->first();
-        $products = [];
+
         foreach( $topic->tags as $tag ){
-            $taggedProducts = ProductTag::where('tag_id', $tag->id)->with('product.productCategories')->get();
-            $products[] = ['tag' => $tag->name, 'productTags' => $taggedProducts];
+            $productTags = ProductTag::where('tag_id', $tag->id)->with('product.productCategories')->get();
+            $productsByTag[] = ['tag' => $tag->name, 'productTags' => $productTags];
         }
 
         return Inertia::render('Welcome', [
-            'products' => $products,
+            'productsByTag' => empty($productsByTag) ? [] : $productsByTag,
             'categories' => $root,
             'cartsHistoryCount' => $cartsHistoryCount,
             'salesCount' => $salesCount,

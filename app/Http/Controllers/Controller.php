@@ -35,24 +35,44 @@ abstract class Controller
         }
         return $with;
     }
-    protected function convertCategoriesForTreeSelect( $categories){
-        $mutatedCategories = $this->recursiveMutateCategories( [ $categories]);
-        return [ 'root' => $mutatedCategories];
+    protected function convertCategoriesForPRComponent( $categories, $childKeyName = 'children'){
+        $cats = $this->recursiveAddKey( [ $categories], 0, $childKeyName)[0];
+        return $this->recursiveAddURL( [ $cats], 0, $childKeyName, 1);
+        //return [ 'root' => $mutatedCategories];
     }
-    protected function recursiveMutateCategories( $array, $depth = 0)
+    protected function recursiveAddURL( $array, $depth = 0, $childKeyName = 'children', $parentId)
     {
         $newArray = [];
-        foreach( $array as $index => $item)
+        foreach( $array as $item)
+        {
+            //$item[ 'url'] =  "/products/category/key/" . $item[ 'id'];
+            if( ! empty( $item[ 'parent_id']) && $item[ 'parent_id'] != $parentId ){
+                $item[ 'url'] =  "/products/category/" . $item[ 'id'] ;
+                $item[ 'url'] .= '/' . $item[ 'parent_id'];
+            }
+
+            if ( count( $item[ $childKeyName]) > 0 && ! empty( $item[ $childKeyName]))
+            {
+                $item[ $childKeyName] = $this->recursiveAddURL( $item[ $childKeyName], $depth + 1, $childKeyName, $parentId);
+            }
+            $newArray[] = $item;
+        }
+        return $newArray;
+    }
+
+    protected function recursiveAddKey( $array, $depth = 0, $childKeyName = 'children')
+    {
+        $newArray = [];
+        foreach( $array as $item)
         {
             $item[ 'key'] = (string) $item[ 'id'];
             if( ! empty( $item[ 'parent_id'])){
                 $item[ 'key'] .= '-' . $item[ 'parent_id'];
             }
-            unset($item[ 'id']);
-            unset($item[ 'parent_id']);
-            if ( count( $item[ 'children']) > 0 && ! empty( $item[ 'children']))
+
+            if ( count( $item[ $childKeyName]) > 0 && ! empty( $item[ $childKeyName]))
             {
-                $item[ 'children'] = $this->recursiveMutateCategories( $item[ 'children'], $depth + 1);
+                $item[ $childKeyName] = $this->recursiveAddKey( $item[ $childKeyName], $depth + 1, $childKeyName);
             }
             $newArray[] = $item;
         }

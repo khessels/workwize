@@ -85,7 +85,7 @@ export default function AddProduct( props) {
                                 setProduct(product)
                                 setSelectedNodeKeys(e.value)
                             }}
-                            options={props.categories.root[0].children}
+                            options={props.categories[0].children}
                             metaKeySelection={false} className="md:w-20rem w-full" selectionMode="checkbox"
                             placeholder="Select Items"></TreeSelect>
                 <br/>

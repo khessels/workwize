@@ -19,7 +19,7 @@ export default function Product({ auth, product }) {
                     </div>
                 </div>
                 <main role="main" className="w-full flex-grow pt-1 px-3">
-                    {product.name}
+
                 </main>
                 <div className="flex-grow-0 px-2">
                     <div className="flex sm:flex-col px-2">

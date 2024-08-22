@@ -66,4 +66,21 @@ class Category extends Model
     {
         return $this->childrenWithParent()->with('children');
     }
+    /**
+     * This will give model's items
+     * @return HasMany
+     */
+    public function itemsWithParent(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    /**
+     * This will give model's items, item's Children and so on until last node.
+     * @return HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->itemsWithParent()->with('items');
+    }
 }

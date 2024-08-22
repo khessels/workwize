@@ -4,24 +4,35 @@ import {Button} from "primereact/button";
 import {TreeTable} from "primereact/treetable";
 import {Column} from "primereact/column";
 import { t} from "@/Components/js/t";
+import ProductRow from "@/Components/ProductRow.jsx";
+import React from "react";
+import { MegaMenu } from 'primereact/megamenu';
 
-export default function Welcome({ auth, products, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
-    debugger;
+export default function Welcome({ auth, productsByTag, categories, cartsHistoryCount, salesCount, cartItemsCount  }) {
+
     const { localeData } = usePage().props;
     const d = localeData.data
+    const items = categories[0].items
+
     return (
         <GuestLayout>
             <Head title={t(d, "title" )}/>
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
                     <div className="sticky top-0 p-4 w-full h-full">
-                        side
+                        <MegaMenu model={items} orientation="vertical" breakpoint="960px" />
                     </div>
                 </div>
-                <main role="main" className="w-full flex-grow pt-1 px-3">
-                    <div className="h-64 flex ">
-                        eee
-                    </div>
+                <main role="main" className="flex sm:flex-col md:px-6">
+                    {
+                        productsByTag.map( ( taggedProductRow, i) =>
+                            <>
+                                <div className="flex-row ">
+                                    <ProductRow key={i} taggedProductRow={ taggedProductRow}/>
+                                </div>
+                            </>
+                        )
+                    }
                 </main>
                 <div className="flex-grow-0 px-2">
                     <div className="flex sm:flex-col px-2">

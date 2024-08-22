@@ -7,8 +7,6 @@ import { Button } from "primereact/button";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-import { ServiceProducts } from '@/Services/Products';
-import Dropdown from "@/Components/Dropdown.jsx";
 import {publish} from "@/Components/js/Events.js";
 import ModalAddProduct from "@/Components/Modals/Product/AddProduct"
 import { Toolbar } from 'primereact/toolbar';
@@ -16,8 +14,9 @@ import { Toolbar } from 'primereact/toolbar';
 import CategoryTree from  "@/Components/CategoryTree"
 import { Toast } from 'primereact/toast';
 
-export default function Products({ auth, categories }) {
-    const [categoryKey, setCategoryKey] = useState(undefined);
+export default function Products({ auth, categories, categoryId, categoryParentId }) {
+    // debugger;
+    // const [categoryKey, setCategoryKey] = useState(undefined);
     const [products, setProducts] = useState([]);
     const toast = useRef(null);
 
@@ -30,6 +29,7 @@ export default function Products({ auth, categories }) {
             <p>Products</p>
         </React.Fragment>
     );
+
     const updateCategoryKey = (key) => {
         if(typeof key !== 'undefined') {
             axios.get('/products/category/key/' + key)
@@ -41,6 +41,13 @@ export default function Products({ auth, categories }) {
                 })
         }
     }
+    useEffect(() => {
+        if( categoryId !== null){
+            let key = categoryId + '-' + categoryParentId;
+            updateCategoryKey( key)
+        }
+
+    }, []);
 
     return (
         <AuthenticatedBackendLayout

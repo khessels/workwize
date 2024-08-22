@@ -36,7 +36,7 @@ export default function CategoryTree({ categories, updateCategoryKey }) {
                 <Toolbar start={startCategoryContent}/>
             </div>
 
-            <Tree selectionMode="single" value={categories.root[0].children} className="w-full md:w-30rem"
+            <Tree selectionMode="single" value={categories[0].children} className="w-full md:w-30rem"
                   onSelectionChange={(e) => {
                       updateCategoryKey(e.value)
                       setSelectedCategory(e.value)

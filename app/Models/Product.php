@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\ProductTag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\ProductPrice;
 class Product extends Model
 {
     protected $table = 'products';
@@ -20,4 +20,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductCategory::class, 'product_id', 'id');
     }
+    public function prices()
+    {
+        return $this->hasMany(ProductPrice::class, 'product_id', 'id');
+    }
+
 }

@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForTreeSelect($root->toArray());
+        $root = $this->convertCategoriesForPRComponent($root->toArray());
 
         return Inertia::render('Products', [
             'categories' => $root['root'][0]['children']
@@ -39,13 +39,15 @@ class ProductController extends Controller
         $product = Product::find( $id);
         return Inertia::render('Product', ['product' => $product]);
     }
-    public function show( Request $request): Response
+    public function show( Request $request, $categoryId = null, $categoryParentId = null): Response
     {
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForTreeSelect($root->toArray());
+        $root = $this->convertCategoriesForPRComponent($root->toArray());
 
         return Inertia::render('Products', [
-            'categories' => $root
+            'categories' => $root,
+            'categoryId' => $categoryId,
+            'categoryParentId' => $categoryParentId
         ]);
     }
     public function showSales( Request $request): Response
@@ -171,11 +173,14 @@ class ProductController extends Controller
     }
     public function getByCategoryKey(Request $request, $key): \Illuminate\Http\JsonResponse
     {
+        //die("hello");
         $exploded = explode('-', $key);
         $parentId = $exploded[1];
         $id = $exploded[0];
         $productIds = ProductCategory::where('id', $id)->where('parent_id', $parentId)->get()->pluck('product_id')->toArray();
-        $products = Product::whereIn('id', $productIds)->with('prices')->with('tags.tag.topic')->get()->toArray();
+        $products = Product::whereIn('id', $productIds)->with(['prices' => function($q) {
+            $q->orderBy('quantity', 'asc');
+        }])->with('tags.tag.topic')->get()->toArray();
         foreach($products as $key => $product){
             if( ! empty( $product['tags']) ){
                 $tags = [];
