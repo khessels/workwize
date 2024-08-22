@@ -2,9 +2,11 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useRemember} from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia'
 import React, { useRef, useState, useEffect } from 'react';
+import {MegaMenu} from "primereact/megamenu";
 
 
-export default function Product({ auth, product }) {
+export default function Product({ auth, product, categories }) {
+
     return (
         <GuestLayout
             auth={auth}
@@ -15,7 +17,7 @@ export default function Product({ auth, product }) {
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
                     <div className="sticky top-0 p-4 w-full h-full">
-                        <p>Categories</p>
+                        <MegaMenu model={categories[0].items} orientation="vertical" breakpoint="960px" />
                     </div>
                 </div>
                 <main role="main" className="w-full flex-grow pt-1 px-3">

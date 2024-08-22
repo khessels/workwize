@@ -36,8 +36,14 @@ class ProductController extends Controller
     }
     public function getById(Request $request, $id)
     {
-        $product = Product::find( $id);
-        return Inertia::render('Product', ['product' => $product]);
+        $root = Category::where('label', 'root')->whereNull('parent_id')->with('items')->first();
+        $root = $this->convertCategoriesForPRComponent($root->toArray(), 'items');
+
+        $product = Product::where('id', $id)->with('tags')->with('prices')->with('productCategories')->first()->toArray();
+        return Inertia::render('Product', [
+            'product' => $product,
+            'categories' => $root
+        ]);
     }
     public function show( Request $request, $categoryId = null, $categoryParentId = null): Response
     {

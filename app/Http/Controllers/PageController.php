@@ -46,7 +46,6 @@ class PageController extends Controller
         $root = $this->convertCategoriesForPRComponent($root->toArray(), 'items');
 
         $topic = Topic::where('name', 'LANDING')->with('tags')->first();
-
         foreach( $topic->tags as $tag ){
             $productTags = ProductTag::where('tag_id', $tag->id)->with('product.productCategories')->get();
             $productsByTag[] = ['tag' => $tag->name, 'productTags' => $productTags];

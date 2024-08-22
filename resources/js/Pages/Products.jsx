@@ -85,11 +85,16 @@ export default function Products({ auth, categories, categoryId, categoryParentI
                             <Column sortable    field="price"       header="Price"  />
                             <Column sortable    field="stock"       header="Stock"  />
                             <Column sortable    field="tag_labels"  header="Tags"   />
-                            {/*<Column             field="action"      header="Action" body={ rowData => {*/}
-                            {/*    return(*/}
-                            {/*        <a style={{textDecoration: 'underline'}} href={`/product/${rowData.id}`} >Show</a>*/}
-                            {/*    )*/}
-                            {/*}}/>*/}
+                            <Column             field="action"      header="Action" body={ rowData => {
+                                return(
+                                    <Button size={'small'} onClick={() => {
+                                        axios.post('/cart/item', {quantity:1, id:rowData.id})
+                                            .then(res => {
+                                                Inertia.reload()
+                                            })
+                                    }}>Add to Cart</Button>
+                                )
+                            }}/>
                         </DataTable>
                     </div>
                 </main>
