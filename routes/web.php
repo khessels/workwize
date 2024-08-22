@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\InjectLocaleData;
 
-
     Route::get('/', [PageController::class, 'index'])->name('welcome')->middleware(InjectLocaleData::class);
     Route::get('/category/tree/{rootLabel?}/{parentId?}', [CategoryController::class, 'tree'])->name('category.tree');
-    Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.by.id');
-
+    Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.details.by.id');
 
     Route::middleware('auth')->group(function () {
         route::group(['prefix' => 'profile'], function(){

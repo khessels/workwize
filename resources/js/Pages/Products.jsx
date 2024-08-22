@@ -1,3 +1,4 @@
+
 import AuthenticatedBackendLayout from '@/Layouts/AuthenticatedBackendLayout';
 import { Head, useRemember} from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia'
@@ -15,7 +16,6 @@ import CategoryTree from  "@/Components/CategoryTree"
 import { Toast } from 'primereact/toast';
 
 export default function Products({ auth, categories, categoryId, categoryParentId }) {
-    // debugger;
     // const [categoryKey, setCategoryKey] = useState(undefined);
     const [products, setProducts] = useState([]);
     const toast = useRef(null);
@@ -48,7 +48,6 @@ export default function Products({ auth, categories, categoryId, categoryParentI
         }
 
     }, []);
-
     return (
         <AuthenticatedBackendLayout
             auth={auth}
@@ -70,12 +69,27 @@ export default function Products({ auth, categories, categoryId, categoryParentI
                         <Toolbar start={startTableContent}/>
                     </div>
                     <div className="card h-64 flex">
-                        <DataTable value={products} tableStyle={{minWidth: '50rem'}}>
-                            <Column field="id" header="Id"></Column>
-                            <Column field="name" header="name"></Column>
-                            <Column field="price" header="Price"></Column>
-                            <Column field="stock" header="Stock"></Column>
-                            <Column field="tag_labels" header="Tags"></Column>
+                        <DataTable selectionMode="simple"  sortMode="multiple" paginator
+                                   rows={25} rowsPerPageOptions={[25, 50, 100, 250]} stripedRows  size={'small'}
+                                   value={products} tableStyle={{minWidth: '50rem'}} onRowSelect={(event) => {
+                            Inertia.visit('/product/' + event.data.id);
+                        }}>
+                            <Column sortable    field="id"          header="Id"     />
+                            <Column sortable field="name" header="name" body={ rowData => {
+                                return(
+                                    <a href={`/product/${rowData.id}`} >
+                                        {rowData.name}
+                                    </a>
+                                )
+                            }}  />
+                            <Column sortable    field="price"       header="Price"  />
+                            <Column sortable    field="stock"       header="Stock"  />
+                            <Column sortable    field="tag_labels"  header="Tags"   />
+                            {/*<Column             field="action"      header="Action" body={ rowData => {*/}
+                            {/*    return(*/}
+                            {/*        <a style={{textDecoration: 'underline'}} href={`/product/${rowData.id}`} >Show</a>*/}
+                            {/*    )*/}
+                            {/*}}/>*/}
                         </DataTable>
                     </div>
                 </main>
