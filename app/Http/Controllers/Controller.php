@@ -38,7 +38,6 @@ abstract class Controller
     protected function convertCategoriesForPRComponent( $categories, $childKeyName = 'children'){
         $cats = $this->recursiveAddKey( [ $categories], 0, $childKeyName)[0];
         return $this->recursiveAddURL( [ $cats], 0, $childKeyName, 1);
-        //return [ 'root' => $mutatedCategories];
     }
     protected function recursiveAddURL( $array, $depth = 0, $childKeyName = 'children', $parentId)
     {
