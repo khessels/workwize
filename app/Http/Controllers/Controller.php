@@ -37,9 +37,9 @@ abstract class Controller
     }
     protected function convertCategoriesForPRComponent( $categories, $childKeyName = 'children'){
         $cats = $this->recursiveAddKey( [ $categories], 0, $childKeyName)[0];
-        return $this->recursiveAddURL( [ $cats], 0, $childKeyName, 1);
+        return $this->recursiveAddURL( 1, [ $cats], 0, $childKeyName );
     }
-    protected function recursiveAddURL( $array, $depth = 0, $childKeyName = 'children', $parentId)
+    protected function recursiveAddURL($parentId,  $array, $depth = 0, $childKeyName = 'children')
     {
         $newArray = [];
         foreach( $array as $item)
@@ -52,7 +52,7 @@ abstract class Controller
 
             if ( count( $item[ $childKeyName]) > 0 && ! empty( $item[ $childKeyName]))
             {
-                $item[ $childKeyName] = $this->recursiveAddURL( $item[ $childKeyName], $depth + 1, $childKeyName, $parentId);
+                $item[ $childKeyName] = $this->recursiveAddURL( $parentId, $item[ $childKeyName], $depth + 1, $childKeyName);
             }
             $newArray[] = $item;
         }
