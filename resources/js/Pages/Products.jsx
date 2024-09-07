@@ -17,6 +17,7 @@ import { Toast } from 'primereact/toast';
 
 export default function Products({ auth, categories, categoryId, categoryParentId }) {
     // const [categoryKey, setCategoryKey] = useState(undefined);
+    // debugger;
     const [products, setProducts] = useState([]);
     const toast = useRef(null);
 
@@ -32,6 +33,7 @@ export default function Products({ auth, categories, categoryId, categoryParentI
 
     const updateCategoryKey = (key) => {
         if(typeof key !== 'undefined') {
+            // debugger;
             axios.get('/products/category/key/' + key)
                 .then(response => {
                     for(let x = 0; x < response.data.length; x++){

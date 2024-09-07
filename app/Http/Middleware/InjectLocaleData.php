@@ -26,8 +26,8 @@ class InjectLocaleData
                 $data[ $pathParts[ 'filename']] = include $filename;
             }
         } else {
-            // Fallback to English if the language file does not exist
-            $languageCode = 'en';
+            // Fallback to default language if the language file does not exist
+            $languageCode = config('app.locale');
             $languageFilePath = "{$localesPath}/{$languageCode}";
             $files = glob($languageFilePath . "/*.php");
             $data = [];

@@ -47,8 +47,13 @@ class ProductController extends Controller
     }
     public function show( Request $request, $categoryId = null, $categoryParentId = null): Response
     {
-        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForPRComponent($root->toArray());
+        $root = Category::where('label', 'root')
+            ->whereNull('parent_id')
+            ->with('children')
+            ->first()
+            ->toArray();
+
+        $root = $this->convertCategoriesForPRComponent($root);
 
         return Inertia::render('Products', [
             'categories' => $root,

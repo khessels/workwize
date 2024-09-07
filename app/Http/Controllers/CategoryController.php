@@ -15,12 +15,12 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForTreeSelect($root->toArray());
-        return Inertia::render('Categories', ['categories' => $root['root'][0]['children']]);
+        $root = $this->convertCategoriesForPRComponent($root->toArray());
+        return Inertia::render('Categories', ['categories' => $root[0]['children']]);
     }
     public function tree($rootLabel = 'root', $parentId = null){
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForTreeSelect($root->toArray());
+        $root = $this->convertCategoriesForPRComponent($root->toArray());
         return response()->json( $root[0]['children']);
     }
     public function createSibling(Request $request, $key, $name)
