@@ -24,6 +24,48 @@ use function PHPUnit\Framework\isNull;
 
 class TagController extends Controller
 {
+    public function tree(Request $request)
+    {
+        try{
+            $topics = Topic::where('visible', 'YES')->with('tags', function($q){
+                $q->where('visible', 'YES');
+            })->whereHas('tags', function($q){
+                $q->where('visible', 'YES');
+            })->get()->toArray();
+            if($request->hasHeader('x-response-format')){
+                if($request->header('x-response-format') == 'primereact'){
+                    foreach( $topics as &$topic) {
+                        $topic[ 'key' ] = $topic[ 'id' ] ;
+                        $topic[ 'children' ] = $topic[ 'tags' ];
+                        unset($topic[ 'tags' ]);
+                        $topic[ 'label'] = $topic[ 'name'];
+                        $topic[ 'data'] = $topic[ 'name'];
+                        unset($topic[ 'name' ]);
+                        foreach( $topic[ 'children'] as &$child) {
+                            $child['label'] = $child[ 'name'];
+                            $child['data'] = $child[ 'name'];
+                            unset($child[ 'name' ]);
+                            $child['key'] = $child['id'];
+                        }
+                    }
+                }
+            }
+            return $this->_response($request, $topics);
+        }catch(\Exception $e){
+            $m = $e->getMessage();
+            error_log($e->getMessage());
+        }
+        return $this->_response($request, 'ERROR');
+    }
+    public function products(Request $request)
+    {
+        $tags = $request->tags;
+        $products = Product::where('active', 'YES')->with( [ 'ProductTags', function( $q) use ( $tags){
+            $q->whereIn('tag_id', $tags);
+        }])->get();
+        return $this->_response($request, $products);
+    }
+
     public function getTopics(Request $request): \Illuminate\Http\JsonResponse
     {
         if($request->header('format')){
@@ -31,7 +73,7 @@ class TagController extends Controller
         }else{
             $topics = Tag::select(DB::raw('id, name'))->get();
         }
-        return response()->json( $topics);
+        return $this->_response($request, $topics);
     }
     public function getTags(Request $request, $topic = null): \Illuminate\Http\JsonResponse
     {
@@ -51,7 +93,6 @@ class TagController extends Controller
             $tags = $query->get();
 
         }
-        return response()->json( $tags);
+        return $this->_response($request, $tags);
     }
-
 }

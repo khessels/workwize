@@ -13,12 +13,14 @@ import ModalAddProduct from "@/Components/Modals/Product/AddProduct"
 import { Toolbar } from 'primereact/toolbar';
 
 import CategoryTree from  "@/Components/CategoryTree"
+import TagTree from  "@/Components/TagTree"
 import { Toast } from 'primereact/toast';
 
-export default function Products({ auth, categories, categoryId, categoryParentId }) {
-    // const [categoryKey, setCategoryKey] = useState(undefined);
-    // debugger;
+export default function Products({ auth, categoryId, categoryParentId }) {
     const [products, setProducts] = useState([]);
+
+    const [tag, setTag] = useState([]);
+
     const toast = useRef(null);
 
     const startTableContent = (
@@ -33,22 +35,30 @@ export default function Products({ auth, categories, categoryId, categoryParentI
 
     const updateCategoryKey = (key) => {
         if(typeof key !== 'undefined') {
-            // debugger;
             axios.get('/products/category/key/' + key)
                 .then(response => {
                     for(let x = 0; x < response.data.length; x++){
-                        response.data[x].price = response.data[x].prices[0].price
+                        response.data[x].price = response.data[x].prices[0]['price']
                     }
                     setProducts(response.data);
                 })
         }
+    }
+    const updateTag = (tag) => {
+        axios.get('/products/filter?tags=' + tag)
+            .then(response => {
+                for(let x = 0; x < response.data.length; x++){
+                    response.data[x].price = response.data[x].prices[0].price
+                }
+                setProducts(response.data);
+            })
+
     }
     useEffect(() => {
         if( categoryId !== null){
             let key = categoryId + '-' + categoryParentId;
             updateCategoryKey( key)
         }
-
     }, []);
     return (
         <AuthenticatedBackendLayout
@@ -63,7 +73,8 @@ export default function Products({ auth, categories, categoryId, categoryParentI
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
                     <div className="sticky top-0 p-4 w-full h-full">
-                        <CategoryTree categories={categories} updateCategoryKey={updateCategoryKey}/>
+                        <CategoryTree  updateCategoryKey={updateCategoryKey}/><br />
+                        <TagTree updateTag={updateTag}/>
                     </div>
                 </div>
                 <main role="main" className="w-full flex-grow pt-1 px-3">
@@ -106,7 +117,7 @@ export default function Products({ auth, categories, categoryId, categoryParentI
                     </div>
                 </div>
             </div>
-            <ModalAddProduct categories={categories}/>
+            <ModalAddProduct />
         </AuthenticatedBackendLayout>
     );
 }

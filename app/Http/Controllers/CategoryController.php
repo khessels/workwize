@@ -12,17 +12,28 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request)
+//    public function index(Request $request)
+//    {
+//        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
+//        $root = $this->convertCategoriesForPRComponent($root->toArray());
+//        return Inertia::render('Categories', ['categories' => $root[0]['children']]);
+//    }
+
+    public function tree(Request $request, $rootLabel = 'root', $parentId = null)
     {
-        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForPRComponent($root->toArray());
-        return Inertia::render('Categories', ['categories' => $root[0]['children']]);
+        if(empty($parentId)) {
+            $root = Category::where('label', $rootLabel)->whereNull('parent_id')->with('children')->first()->toArray();
+        }else{
+            $root = Category::where('label', $rootLabel)->where('parent_id', $parentId)->with('children')->first()->toArray();
+        }
+        if($request->hasHeader('x-response-format')) {
+            if ($request->header('x-response-format') == 'primereact') {
+                $root = $this->convertCategoriesForPRComponent($root);
+            }
+        }
+        return $this->_response($request, $root);
     }
-    public function tree($rootLabel = 'root', $parentId = null){
-        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForPRComponent($root->toArray());
-        return response()->json( $root[0]['children']);
-    }
+
     public function createSibling(Request $request, $key, $name)
     {
         return $this->_response($request, 'OK');

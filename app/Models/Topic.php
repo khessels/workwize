@@ -8,10 +8,10 @@ use App\Models\Tag;
 class Topic extends Model
 {
     protected $table = 'topic';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'visible'];
     use HasFactory;
 
-    public function tags()
+    public function tags(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Tag::class);
     }

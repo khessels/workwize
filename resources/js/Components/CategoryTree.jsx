@@ -5,11 +5,19 @@ import { Inertia } from '@inertiajs/inertia'
 import { Toolbar} from "primereact/toolbar";
 import ModalText from "@/Components/Modals/Text"
 
-export default function CategoryTree({ categories, updateCategoryKey }) {
+export default function CategoryTree({ updateCategoryKey }) {
 
     const [ categoryName, setCategoryName] = useState();
     const [ selectedCategory, setSelectedCategory] = useState( updateCategoryKey);
     const [ visible, setVisible] = useState(false);
+
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        axios.get('/category/tree/root',  {headers: {"x-response-format":'primereact'}} )
+            .then(response => {
+                setCategories(response.data[0].children);
+            })
+    }, []);
 
     useEffect(() => {
         if( categoryName !== undefined){
@@ -36,7 +44,7 @@ export default function CategoryTree({ categories, updateCategoryKey }) {
                 <Toolbar start={startCategoryContent}/>
             </div>
 
-            <Tree selectionMode="single" value={categories[0].children} className="w-full md:w-30rem"
+            <Tree selectionMode="single" value={categories} className="w-full md:w-30rem"
                   onSelectionChange={(e) => {
                       updateCategoryKey(e.value)
                       setSelectedCategory(e.value)

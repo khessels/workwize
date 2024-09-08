@@ -27,14 +27,6 @@ abstract class Controller
         return $response;
     }
 
-    private function with( bool $withProduct = false)
-    {
-        $with = 'items';
-        if( $withProduct){
-            $with = 'items.product';
-        }
-        return $with;
-    }
     protected function convertCategoriesForPRComponent( $categories, $childKeyName = 'children'){
         $cats = $this->recursiveAddKey( [ $categories], 0, $childKeyName)[0];
         return $this->recursiveAddURL( 1, [ $cats], 0, $childKeyName );
@@ -77,7 +69,14 @@ abstract class Controller
         }
         return $newArray;
     }
-
+    private function with( bool $withProduct = false)
+    {
+        $with = 'items';
+        if( $withProduct){
+            $with = 'items.product';
+        }
+        return $with;
+    }
 
     protected function getCart( bool $withProduct = false)
     {

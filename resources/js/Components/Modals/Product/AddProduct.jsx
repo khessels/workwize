@@ -26,6 +26,13 @@ export default function AddProduct( props) {
         {name:'YES', code:'YES' },
         {name:'NO', code:'NO' }
     ];
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        axios.get('/category/tree/root',  {headers: {"x-response-format":'primereact'}} )
+            .then(response => {
+                setCategories(response.data[0].children);
+            })
+    }, []);
 
     subscribe("modals", (data) =>{
         if(data.detail === 'hide'){
@@ -85,7 +92,7 @@ export default function AddProduct( props) {
                                 setProduct(product)
                                 setSelectedNodeKeys(e.value)
                             }}
-                            options={props.categories[0].children}
+                            options={categories}
                             metaKeySelection={false} className="md:w-20rem w-full" selectionMode="checkbox"
                             placeholder="Select Items"></TreeSelect>
                 <br/>
