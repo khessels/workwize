@@ -13,7 +13,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-Artisan::command('tag:queue', function () {
+Artisan::command('tag:test', function () {
     $name = 'test:2 for one';
     $topic = Topic::where('name', 'PROMOTION')->firstOrFail();
     $enablesAt = \Illuminate\Support\Carbon::now()->toDateTimeString();
@@ -54,12 +54,13 @@ Artisan::command('tag:install', function () {
             });
         }
     }
-    $this->comment('Finished tag scheduled task');
-})->purpose('install Tags.')->everyMinute();
+    $this->comment('Finished tag:install task');
+})->purpose('Install queued Tags.')->everyMinute();
 
 Artisan::command('tag:expire', function () {
     $expiresAt = \Illuminate\Support\Carbon::now()->toDateTimeString();
     Tag::where('expires_at','<=', $expiresAt)->delete();
+    $this->comment('Tag installed: finished');
 })->purpose('Cleanup expired Tags.')->everyMinute();
 
 Schedule::call(function () {
