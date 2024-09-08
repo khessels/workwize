@@ -14,10 +14,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\InjectLocaleData;
 
-    Route::get('/', [PageController::class, 'index'])->name('welcome')->middleware(InjectLocaleData::class);
-    Route::get('/category/tree/{rootLabel?}/{parentId?}', [CategoryController::class, 'tree'])->name('category.tree');
-    Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.details.by.id');
-    Route::get('/tags/tree', [TagController::class, 'tree'])->name('tags.tree.public');
+
 
     Route::middleware('auth')->group(function () {
         route::group(['prefix' => 'profile'], function(){
@@ -64,16 +61,23 @@ use App\Http\Middleware\InjectLocaleData;
                 Route::get('/tree/items', [CategoryController::class, 'treeItems'])->name('categories.tree.items');
                 Route::get('/test', [CategoryController::class, 'test'])->name('categories.test');
                 Route::post('/{key}/sibling/{name}', [CategoryController::class, 'createSibling'])->name('category.create.sibling');
-
             });
             Route::get('/backend', [DashboardController::class, 'index_backend'])->name('dashboard.backend');
             Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+            Route::get('/tags/tree', [TagController::class, 'tree'])->name('tags.tree');
         });
         Route::middleware('role:admin|supplier')->group(function () {
-            Route::get('/tags/{topic?}', [TagController::class, 'getTags'])->name('tags');
+            Route::get('/tags/topic/{topic?}', [TagController::class, 'getTags'])->name('tags');
             Route::get('/tag/topics', [TagController::class, 'getTopics'])->name('tag.topics');
+            Route::get('/tags/manage', [TagController::class, 'show'])->name('tags.manage');
+            Route::get('/tags/queued', [TagController::class, 'queuedTags'])->name('tags.queued');
+            Route::get('/tags/active', [TagController::class, 'activeTags'])->name('tags.active');
         });
     });
+Route::get('/', [PageController::class, 'index'])->name('welcome')->middleware(InjectLocaleData::class);
+Route::get('/category/tree/{rootLabel?}/{parentId?}', [CategoryController::class, 'tree'])->name('category.tree');
+Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.details.by.id');
+
 Route::get('/products/category/{categoryId}/{categoryParentId}', [ProductController::class, 'show'])->name('products.by.category.ids');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.by.filters');
 require __DIR__.'/auth.php';

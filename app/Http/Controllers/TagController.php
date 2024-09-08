@@ -7,7 +7,9 @@ use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductTag;
 use App\Models\Tag;
+use App\Models\TagQueue;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -24,14 +26,44 @@ use function PHPUnit\Framework\isNull;
 
 class TagController extends Controller
 {
+    public function queuedTags(Request $request)
+    {
+        try{
+            $tags = TagQueue::with('topic')->get();
+            return $this->_response($request, $tags);
+        }catch(\Exception $e){
+            $m = $e->getMessage();
+            error_log($e->getMessage());
+        }
+        return $this->_response($request, 'ERROR');
+    }
+    public function activeTags(Request $request)
+    {
+        try{
+            $tags = ProductTag::with('tag.topic')->with('product.prices')->get();
+            return $this->_response($request, $tags);
+        }catch(\Exception $e){
+            $m = $e->getMessage();
+            error_log($e->getMessage());
+        }
+        return $this->_response($request, 'ERROR');
+    }
+
     public function tree(Request $request)
     {
         try{
-            $topics = Topic::where('visible', 'YES')->with('tags', function($q){
-                $q->where('visible', 'YES');
-            })->whereHas('tags', function($q){
-                $q->where('visible', 'YES');
-            })->get()->toArray();
+            if($request->has('filter')){
+                if($request->filter == 'all'){
+                    $topics = Topic::where('visible', 'YES')->with('tags')->whereHas('tags')->get()->toArray();
+                }
+            }
+            if(empty($topics)){
+                $topics = Topic::where('visible', 'YES')->with('tags', function($q){
+                    $q->where('visible', 'YES');
+                })->whereHas('tags', function($q){
+                    $q->where('visible', 'YES');
+                })->get()->toArray();
+            }
             if($request->hasHeader('x-response-format')){
                 if($request->header('x-response-format') == 'primereact'){
                     foreach( $topics as &$topic) {
@@ -64,6 +96,10 @@ class TagController extends Controller
             $q->whereIn('tag_id', $tags);
         }])->get();
         return $this->_response($request, $products);
+    }
+    public function show(Request $request)
+    {
+        return Inertia::render('Tags');
     }
 
     public function getTopics(Request $request): \Illuminate\Http\JsonResponse

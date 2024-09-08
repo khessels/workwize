@@ -14,5 +14,4 @@ class TagQueue extends Model
      {
          return $this->hasOne(Topic::class, 'id', 'topic_id');
      }
-
 }

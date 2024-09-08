@@ -6,7 +6,6 @@ import { Toolbar} from "primereact/toolbar";
 import ModalText from "@/Components/Modals/Text"
 
 export default function CategoryTree({ updateCategoryKey }) {
-
     const [ categoryName, setCategoryName] = useState();
     const [ selectedCategory, setSelectedCategory] = useState( updateCategoryKey);
     const [ visible, setVisible] = useState(false);

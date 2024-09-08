@@ -37,6 +37,9 @@ export default function AuthenticatedBackendLayout({ auth,  user, header, childr
                                 <NavLink href={route('products')}>
                                     Products
                                 </NavLink>
+                                <NavLink href={route('tags.manage')}>
+                                    Manage Tags
+                                </NavLink>
                             </div>
                             <div className="ms-3 relative">
                                 <Dropdown>

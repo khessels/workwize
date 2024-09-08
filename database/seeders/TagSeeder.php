@@ -24,7 +24,7 @@ class TagSeeder extends Seeder
             $oTopic->save();
             if($topic === 'LANDING') {
                 foreach($tags as $tag) {
-                    $tag = new Tag(['name' => $tag, 'topic_id' => $oTopic->id]);
+                    $tag = new Tag(['name' => $tag, 'topic_id' => $oTopic->id, 'visible' => 'YES']);
                     $tag->save();
                 }
             }else{

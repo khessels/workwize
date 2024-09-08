@@ -119,7 +119,7 @@ export default function AddProduct( props) {
                 <Dropdown id={"topics"} value={topic} options={topics} optionLabel="name"
                           placeholder="Select a topic" className="w-full md:w-14rem" onChange={(e) => {
                     setTopic( e.value)
-                    axios.get('/tags/' + e.value.code, {headers: {'format': 'select'}})
+                    axios.get('/tags/topic/' + e.value.code, {headers: {'format': 'select'}})
                         .then(res => {
                             setTags(res.data);
                         })
