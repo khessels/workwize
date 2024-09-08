@@ -27,10 +27,26 @@ return new class extends Migration
                 ->on('topic')
                 ->onDelete(' cascade');
             $table->enum('visible', ['YES','NO'])->nullable(false)->default('NO');
+            $table->dateTime('expires_at')->nullable(true);
+            $table->timestamps();
+        });
+
+        // add a tag at a point in the future (for example a promotion that starts at a specific time)
+        Schema::create('tag_queue', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable(false);
+            $table->unsignedBigInteger('topic_id')->nullable(false);
+            $table->foreign('topic_id')
+                ->references('id')
+                ->on('topic')
+                ->onDelete(' cascade');
+            $table->enum('visible', ['YES','NO'])->nullable(false)->default('NO');
             $table->dateTime('enables_at')->nullable(true);
             $table->dateTime('expires_at')->nullable(true);
             $table->timestamps();
         });
+
+
     }
 
     /**

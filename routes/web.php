@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
@@ -26,9 +27,16 @@ use App\Http\Middleware\InjectLocaleData;
         });
 
         Route::middleware('role:customer')->group(function () {
+            route::group(['prefix' => 'checkout'], function(){
+                Route::get('/', [CheckoutController::class, 'show'])->name('page.checkout');
+            });
+        });
+
+        Route::middleware('role:customer')->group(function () {
             route::group(['prefix' => 'cart'], function(){
                 Route::get('/', [CartController::class, 'show'])->name('cart');
-                Route::post('/checkout', [CartController::class, 'checkOut'])->name('checkout');
+
+
                 Route::post('/item', [CartController::class, 'addItem'])->name('cart.item.add');
                 Route::delete('/item/{id}', [CartController::class, 'removeItem'])->name('cart.item.remove');
             });

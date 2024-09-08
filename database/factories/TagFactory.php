@@ -14,7 +14,6 @@ class TagFactory extends Factory
         return [
             'name'=> $this->faker->text(8),
             'visible'=> 'NO',
-            'enables_at' => null,
             'expires_at' => null,
         ];
     }

@@ -30,6 +30,7 @@ class ProductController extends Controller
         $query = Product::query();
         $query = $query->where('active', 'YES');
         $query = $query->with('tags');
+
         if($request->filled('tags')){
             $tags =  explode(',', $request->tags);
             $query = $query->with('tags', function($q) use( $tags){
