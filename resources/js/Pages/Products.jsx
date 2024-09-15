@@ -15,8 +15,10 @@ import { Toolbar } from 'primereact/toolbar';
 import CategoryTree from  "@/Components/CategoryTree"
 import TagTree from  "@/Components/TagTree"
 import { Toast } from 'primereact/toast';
+import SetLayout from "@/Layouts/SetLayout"
 
 export default function Products({ auth, categoryId, categoryParentId }) {
+    let Layout = SetLayout(auth.layout);
     const [products, setProducts] = useState([]);
 
     const [tag, setTag] = useState([]);
@@ -52,8 +54,8 @@ export default function Products({ auth, categoryId, categoryParentId }) {
                 }
                 setProducts(response.data);
             })
-
     }
+
     useEffect(() => {
         if( categoryId !== null){
             let key = categoryId + '-' + categoryParentId;
@@ -61,7 +63,7 @@ export default function Products({ auth, categoryId, categoryParentId }) {
         }
     }, []);
     return (
-        <AuthenticatedBackendLayout
+        <Layout
             auth={auth}
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Products</h2>}
@@ -118,6 +120,6 @@ export default function Products({ auth, categoryId, categoryParentId }) {
                 </div>
             </div>
             <ModalAddProduct />
-        </AuthenticatedBackendLayout>
+        </Layout>
     );
 }

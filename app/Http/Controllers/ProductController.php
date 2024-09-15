@@ -15,7 +15,7 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -25,6 +25,14 @@ use function PHPUnit\Framework\isNull;
 
 class ProductController extends Controller
 {
+    public function show( Request $request, $categoryId = null, $categoryParentId = null): Response
+    {
+        return Inertia::render('Products', [
+            'categoryId' => $categoryId,
+            'categoryParentId' => $categoryParentId
+        ]);
+    }
+
     public function filter(Request $request)
     {
         $query = Product::query();
@@ -40,33 +48,20 @@ class ProductController extends Controller
                 $q->whereIn('tag_id', $tags);
             });
         }
-        if($request->filled('categories')){
-
-        }
 
         $query = $query->with('prices');
         $query = $query->whereHas('prices');
 
         $products = $query->get();
 
-        // $products = Product::where('active', 'YES')->with('prices')->get();
         if($request->hasHeader('x-response-format')) {
             if ($request->header('x-response-format') == 'primereact') {
                 //$root = $this->convertCategoriesForPRComponent($root->toArray());
             }
         }
-
         return $this->_response( $request, $products);
     }
-    public function index(Request $request)
-    {
-        $root = Category::where('label', 'root')->whereNull('parent_id')->with('children')->first();
-        $root = $this->convertCategoriesForPRComponent($root->toArray());
 
-        return Inertia::render('Products', [
-            'categories' => $root['root'][0]['children']
-        ]);
-    }
     public function getById(Request $request, $id)
     {
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('items')->first();
@@ -78,13 +73,7 @@ class ProductController extends Controller
             'categories' => $root
         ]);
     }
-    public function show( Request $request, $categoryId = null, $categoryParentId = null): Response
-    {
-        return Inertia::render('Products', [
-            'categoryId' => $categoryId,
-            'categoryParentId' => $categoryParentId
-        ]);
-    }
+
     public function showSales( Request $request): Response
     {
         $usersSales = User::has( 'carts.items')->with( 'carts.items.product')->get();

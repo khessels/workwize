@@ -3,12 +3,12 @@ import { Head, useRemember} from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia'
 import React, { useRef, useState, useEffect } from 'react';
 import {MegaMenu} from "primereact/megamenu";
-
+import SetLayout from "@/Layouts/SetLayout"
 
 export default function Product({ auth, product, categories }) {
-
+    let Layout = SetLayout(auth.layout);
     return (
-        <GuestLayout
+        <Layout
             auth={auth}
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Product</h2>}
@@ -29,6 +29,6 @@ export default function Product({ auth, product, categories }) {
                     </div>
                 </div>
             </div>
-        </GuestLayout>
+        </Layout>
     );
 }

@@ -4,11 +4,11 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
-import {publish} from "@/Components/js/Events.js";
-import SideNav from "@/Components/SideNav.jsx"
+import {publish} from "@/Components/js/Events";
+import SideNav from "@/Components/SideNav"
+import CartItemCount from "@/Components/Cart/ItemCount"
 
-
-export default function AuthenticatedBackendLayout({ auth,  user, header, children }) {
+export default function AuthenticatedBackendLayout({ auth,  user, children }) {
     return (
         <div className="min-h-screen">
             <nav className="">
@@ -20,7 +20,7 @@ export default function AuthenticatedBackendLayout({ auth,  user, header, childr
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('welcome')}>
-                                    Welcome
+                                    Welcome <CartItemCount defaultValue={''}/>
                                 </NavLink>
                                 <NavLink href={route('dashboard')}>
                                     Dashboard

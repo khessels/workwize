@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 use function PHPUnit\Framework\isNull;
 
-class PageController extends Controller
+class PageController extends CartController
 {
     public function index(Request $request)
     {
@@ -40,7 +40,7 @@ class PageController extends Controller
             $cartsHistoryCount = $this->getCartsHistoryCount();
         }
 
-        $cartItemsCount = $this->getCartItemsCount();
+        $cartItemsCount = $this->cartItemsCount();
 
         $root = Category::where('label', 'root')->whereNull('parent_id')->with('items')->first();
         $root = $this->convertCategoriesForPRComponent($root->toArray(), 'items');

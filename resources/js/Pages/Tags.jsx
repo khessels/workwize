@@ -5,10 +5,12 @@ import React, {useEffect, useState} from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TabView, TabPanel } from 'primereact/tabview';
-
+import SetLayout from "@/Layouts/SetLayout"
 
 
 export default function Tags({ auth }) {
+    let Layout = SetLayout(auth.layout);
+
     const [tags, setTags] = useState([]);
     const [queuedTags, setQueuedTags] = useState([]);
     const [activeTags, setActiveTags] = useState([]);
@@ -32,7 +34,7 @@ export default function Tags({ auth }) {
     }, []);
 
     return (
-        <AuthenticatedBackendLayout
+        <Layout
             auth={auth}
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Tags</h2>}
@@ -190,6 +192,6 @@ export default function Tags({ auth }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedBackendLayout>
+        </Layout>
     );
 }

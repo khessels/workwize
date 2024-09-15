@@ -1,9 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import SetLayout from "@/Layouts/SetLayout"
 
 export default function Sales({ auth, sales }) {
+    let Layout = SetLayout(auth.layout);
     return (
-        <AuthenticatedLayout
+
+        <Layout
             user={auth.user}
             header={<h2 className="font-semibold text-xl leading-tight">Sales</h2>}
         >
@@ -90,6 +93,6 @@ export default function Sales({ auth, sales }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Layout>
     );
 }

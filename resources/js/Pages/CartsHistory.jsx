@@ -2,10 +2,12 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, useRemember} from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia'
 import { useState } from 'react';
+import SetLayout from "@/Layouts/SetLayout"
 
 export default function CartsHistory({ auth, carts }) {
+    let Layout = SetLayout(auth.layout);
     return (
-        <AuthenticatedLayout
+        <Layout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Cart</h2>}
         >
@@ -69,6 +71,6 @@ export default function CartsHistory({ auth, carts }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Layout>
     );
 }

@@ -4,10 +4,11 @@ import { Inertia } from '@inertiajs/inertia'
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import SetLayout from "@/Layouts/SetLayout"
 
 
 export default function Checkout({ auth, cart }) {
+    let Layout = SetLayout(auth.layout);
     const notify_removed = () => toast("Removed cart");
     const notify_checking_out = () => toast("Checked out");
     let cartValue = 0;
@@ -16,8 +17,7 @@ export default function Checkout({ auth, cart }) {
         cartValue += cart.items[x].product.price * cart.items[x].quantity;
     }
     return (
-
-        <AuthenticatedLayout
+        <Layout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Cart</h2>}
         >
@@ -88,6 +88,6 @@ export default function Checkout({ auth, cart }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Layout>
     );
 }
