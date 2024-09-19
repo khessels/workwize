@@ -14,16 +14,16 @@ import { Toolbar } from 'primereact/toolbar';
 
 import CategoryTree from  "@/Components/CategoryTree"
 import TagTree from  "@/Components/TagTree"
-import { Toast } from 'primereact/toast';
-import SetLayout from "@/Layouts/SetLayout"
 
+import SetLayout from "@/Layouts/SetLayout"
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Products({ auth, categoryId, categoryParentId }) {
+    //console.log(auth)
     let Layout = SetLayout(auth.layout);
     const [products, setProducts] = useState([]);
-
     const [tag, setTag] = useState([]);
 
-    const toast = useRef(null);
 
     const startTableContent = (
         <React.Fragment>
@@ -37,7 +37,7 @@ export default function Products({ auth, categoryId, categoryParentId }) {
 
     const updateCategoryKey = (key) => {
         if(typeof key !== 'undefined') {
-            axios.get('/products/category/key/' + key)
+            axios.get('/products?categories=' + key)
                 .then(response => {
                     for(let x = 0; x < response.data.length; x++){
                         response.data[x].price = response.data[x].prices[0]['price']
@@ -47,7 +47,7 @@ export default function Products({ auth, categoryId, categoryParentId }) {
         }
     }
     const updateTag = (tag) => {
-        axios.get('/products/filter?tags=' + tag)
+        axios.get('/products?tags=' + tag)
             .then(response => {
                 for(let x = 0; x < response.data.length; x++){
                     response.data[x].price = response.data[x].prices[0].price
@@ -68,9 +68,8 @@ export default function Products({ auth, categoryId, categoryParentId }) {
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Products</h2>}
         >
-
+            <ToastContainer/>
             <Head title="Products"/>
-            <Toast ref={toast}/>
 
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">
@@ -101,14 +100,23 @@ export default function Products({ auth, categoryId, categoryParentId }) {
                             <Column sortable    field="stock"       header="Stock"  />
                             <Column sortable    field="tag_labels"  header="Tags"   />
                             <Column             field="action"      header="Action" body={ rowData => {
-                                return(
-                                    <Button size={'small'} onClick={() => {
-                                        axios.post('/cart/item', {quantity:1, id:rowData.id})
-                                            .then(res => {
-                                                Inertia.reload()
-                                            })
-                                    }}>Add to Cart</Button>
-                                )
+                                {
+                                    if ( ! auth.isPublic ) {
+                                        return(
+                                            <Button size={'small'} onClick={() => {
+                                                toast('Added')
+                                                axios.post('/cart/item', {quantity:1, id:rowData.id})
+                                                    .then(res => {
+                                                        Inertia.reload()
+                                                    })
+                                            }}>Add to Cart</Button>
+                                        )
+                                    }else {
+                                        return(
+                                            <span>Login</span>
+                                        )
+                                    }
+                                }
                             }}/>
                         </DataTable>
                     </div>

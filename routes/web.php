@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:supplier')->group(function () {
         route::group(['prefix' => 'products'], function() {
-            Route::get('/', [ProductController::class, 'show'])->name('products');
+            //Route::get('/', [ProductController::class, 'show'])->name('products');
             Route::get('/category/key/{key}', [ProductController::class, 'getByCategoryKey'])->name('products.category.key');
             Route::get('/sales', [ProductController::class, 'showSales'])->name('products.sales');
         });
@@ -70,18 +70,18 @@ Route::middleware('auth')->group(function () {
     });
     Route::middleware('role:admin|supplier')->group(function () {
         Route::get('/tags/topic/{topic?}', [TagController::class, 'getTags'])->name('tags');
-        Route::get('/tag/topics', [TagController::class, 'getTopics'])->name('tag.topics');
         Route::get('/tags/manage', [TagController::class, 'show'])->name('tags.manage');
         Route::get('/tags/queued', [TagController::class, 'queuedTags'])->name('tags.queued');
         Route::get('/tags/active', [TagController::class, 'activeTags'])->name('tags.active');
     });
 });
+Route::get('/tag/topics', [TagController::class, 'getTopics'])->name('tag.topics');
 Route::get('/tags/tree', [TagController::class, 'tree'])->name('tags.tree');
 Route::get('/', [PageController::class, 'index'])->name('welcome')->middleware(InjectLocaleData::class);
 Route::get('/category/tree/{rootLabel?}/{parentId?}', [CategoryController::class, 'tree'])->name('category.tree');
 Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.details.by.id');
 
 Route::get('/products/category/{categoryId}/{categoryParentId}', [ProductController::class, 'show'])->name('products.by.category.ids');
-Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.by.filters');
-Route::get('/products', [ProductController::class, 'show'])->name('view.products');
+//Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.by.filters');
+Route::get('/products', [ProductController::class, 'filter'])->name('products');
 require __DIR__.'/auth.php';

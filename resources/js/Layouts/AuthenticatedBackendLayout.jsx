@@ -20,13 +20,16 @@ export default function AuthenticatedBackendLayout({ auth,  user, children }) {
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('welcome')}>
-                                    Welcome <CartItemCount defaultValue={''}/>
+                                    Welcome
                                 </NavLink>
                                 <NavLink href={route('dashboard')}>
                                     Dashboard
                                 </NavLink>
                                 <NavLink href={route('dashboard.backend')}>
                                     Backend
+                                </NavLink>
+                                <NavLink href={route('cart')}>
+                                    Cart&nbsp; <button className="rounded-full text-xs font-bold text-white bg-red-500 py-1 px-2"><CartItemCount defaultValue={''}/></button>
                                 </NavLink>
                             </div>
                         </div>

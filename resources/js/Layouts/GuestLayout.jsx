@@ -18,6 +18,9 @@ export default function GuestLayout({ children }) {
                                 <NavLink href={route('welcome')}>
                                     Welcome
                                 </NavLink>
+                                <NavLink href={route('login')}>
+                                    Login
+                                </NavLink>
                             </div>
                         </div>
                     </div>

@@ -61,10 +61,15 @@ class HandleInertiaRequests extends Middleware
             }
         }
         $auth[ 'layout'] = $layout;
-        return [
+        $arr = [
             ...parent::share($request),
             'auth' => $auth,
             'csrf_token' => csrf_token(),
         ];
+        // add flash message if available
+        if(!empty($request->session()->get('message'))){
+            $arr['flash'] = ['message' => fn() => $request->session()->get('message')];
+        }
+        return $arr;
     }
 }

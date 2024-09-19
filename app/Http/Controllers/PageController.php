@@ -50,7 +50,7 @@ class PageController extends CartController
             $productTags = ProductTag::where('tag_id', $tag->id)->with('product.productCategories')->get();
             $productsByTag[] = ['tag' => $tag->name, 'productTags' => $productTags];
         }
-
+        session()->flash('message', 'Post successfully updated.');
         return Inertia::render('Welcome', [
             'productsByTag' => empty($productsByTag) ? [] : $productsByTag,
             'categories' => $root,

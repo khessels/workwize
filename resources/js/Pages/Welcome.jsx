@@ -5,19 +5,28 @@ import React from "react";
 import { MegaMenu } from 'primereact/megamenu';
 import TagTree from  "@/Components/TagTree"
 import SetLayout from "@/Layouts/SetLayout"
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Welcome({ auth, productsByTag, categories }) {
     let Layout = SetLayout(auth.layout);
 
     const { localeData } = usePage().props;
+    const { flash } = usePage().props
+    debugger;
     const d = localeData.data
     const items = categories[0].items
     const updateTag = (tag) => {
+        console.log(tag)
         window.location = '/products?tags=' + tag;
     }
 
     return (
+
         <Layout user={auth.user}>
+            <ToastContainer/>
+            {flash && (
+                toast("Test")
+            )}
             <Head title={t(d, "title" )}/>
             <div className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow">
                 <div className="w-fixed flex-shrink flex-grow-0 px-4">

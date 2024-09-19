@@ -12,10 +12,11 @@ use App\Models\ProductTag;
 use App\Models\Topic;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Request;
+//use Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -35,31 +36,65 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
-        $query = Product::query();
-        $query = $query->where('active', 'YES');
-        $query = $query->with('tags');
-
-        if($request->filled('tags')){
-            $tags =  explode(',', $request->tags);
-            $query = $query->with('tags', function($q) use( $tags){
-                $q->whereIn('tag_id', $tags);
-            });
-            $query = $query->whereHas('tags', function($q) use( $tags){
-                $q->whereIn('tag_id', $tags);
-            });
-        }
-
-        $query = $query->with('prices');
-        $query = $query->whereHas('prices');
-
-        $products = $query->get();
-
-        if($request->hasHeader('x-response-format')) {
-            if ($request->header('x-response-format') == 'primereact') {
-                //$root = $this->convertCategoriesForPRComponent($root->toArray());
+        try{
+            if( ! $request->wantsJson()){
+                $categoryId = null;
+                $categoryParentId = null;
+                if($request->has('categoryId')){
+                    $categoryId = $request->categoryId;
+                }
+                if($request->has('categoryParentId')){
+                    $categoryParentId = $request->categoryParentId;
+                }
+                return Inertia::render('Products', [
+                    'categoryId' => $categoryId,
+                    'categoryParentId' => $categoryParentId
+                ]);
             }
+
+            $query = Product::query();
+            $query = $query->where('active', 'YES');
+            $query = $query->with('tags');
+
+            if($request->filled('tags')){
+                $tags =  explode(',', $request->tags);
+                $query = $query->with('tags', function($q) use( $tags){
+                    $q->whereIn('tag_id', $tags);
+                });
+                $query = $query->whereHas('tags', function($q) use( $tags){
+                    $q->whereIn('tag_id', $tags);
+                });
+            }
+            if($request->filled('categories')){
+                $categories = explode(',', $request->categories);
+                $categoryIds = [];
+                foreach($categories as $category){
+                    $categoryParts = explode('-', $category);
+                    $categoryIds[] = $categoryParts[0];
+                }
+                $query = $query->with('productCategories');
+                $query = $query->whereHas('productCategories', function($q) use( $categoryIds){
+                    $q->whereIn('id', $categoryIds);
+                });
+            }
+
+
+
+            $query = $query->with('prices');
+            $query = $query->whereHas('prices');
+
+            $products = $query->get();
+
+            if($request->hasHeader('x-response-format')) {
+                if ($request->header('x-response-format') == 'primereact') {
+                    //$root = $this->convertCategoriesForPRComponent($root->toArray());
+                }
+            }
+            return $this->_response( $request, $products);
+
+        }catch(\Exception $e){
+            return $this->_response( $request, 'ERROR');
         }
-        return $this->_response( $request, $products);
     }
 
     public function getById(Request $request, $id)

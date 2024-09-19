@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "spatie/laravel-permission": "^6.9",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+        "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
